@@ -1,3 +1,5 @@
+#include <stdio.h>
+#include <stdlib.h>
 #ifndef _LIST_H_
 #define _LIST_H_
 
@@ -36,6 +38,12 @@ void deleteFront(List L); // Delete the front element. Pre: length()>0
 void deleteBack(List L);  // Delete the back element. Pre: length()>0
 void delete (List L);
 
-void print_list(List L);
+void printList(FILE *out, List L); // Prints to the file pointed to by out, a
+
+List copyList(List L);
+
+// void print_list(List L) {
+
+// List concatList(List A, List B);
 
 #endif

@@ -1,6 +1,7 @@
 #include "List.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 typedef struct NodeObj {
   int data;
@@ -13,11 +14,12 @@ typedef NodeObj *Node;
 typedef struct ListObj {
   Node front;
   Node back;
+  Node cursor;
   int length;
   int index;
 } ListObj;
 
-Node cursor = NULL;
+// Node cursor = NULL;
 
 Node newNode(int data) {
   Node n = malloc(sizeof(NodeObj));
@@ -40,12 +42,16 @@ List newList(void) {
   l->front = l->back = NULL;
   l->length = 0;
   l->index = -1;
-
+  l->cursor = NULL;
   return l;
 }
 
 void freeList(List *pL) {
   if (pL != NULL && *pL != NULL) {
+    while (length(*pL) != 0) {
+      moveFront(*pL);
+      delete (*pL);
+    }
   }
   free(*pL);
   *pL = NULL;
@@ -54,7 +60,7 @@ void freeList(List *pL) {
 int length(List L) { return L->length; }
 
 int index(List L) {
-  if (cursor != NULL) {
+  if (L->cursor != NULL) {
     return L->index;
   }
   return -1;
@@ -75,56 +81,68 @@ int back(List L) {
   return 0;
 }
 
-
 int get(List L) {
-    if(L->length>0 && L->index >=0) {
-        return cursor->data;
-    } else {
-        return 0;
+  if (L->length > 0 && L->index >= 0) {
+    return L->cursor->data;
+  } else {
+    return -1;
+  }
+}
+
+int equals(List A, List B) {
+  Node temp1 = A->front;
+  Node temp2 = B->front;
+  while (temp1 != NULL && temp2 != NULL) {
+    if (temp1->data != temp2->data) {
+      return 0;
     }
+    temp1 = temp1->next;
+    temp2 = temp2->next;
+  }
+  return 1;
 }
 
 void clear(List L) {
-  Node n = L->front;
-  while (n != NULL) {
-    cursor = n;
+  Node temp = L->front;
+  while (temp != NULL) {
     delete (L);
-    n = n->next;
+    temp = temp->next;
   }
   L->length = 0;
   L->index = -1;
 }
-
 void moveFront(List L) {
   if (L != NULL) {
-    cursor = L->front;
+    L->cursor = L->front;
     L->index = 0;
   }
 }
 
 void moveBack(List L) {
   if (L != NULL) {
-    cursor = L->back;
+    L->cursor = L->back;
     L->index = L->length - 1;
   }
 }
 
 void movePrev(List L) {
-  if (cursor != NULL && cursor != L->front) {
-    cursor = cursor->prev;
-  } else if (cursor != NULL && cursor == L->front) {
-    cursor = L->front->prev;
+  if (L->cursor != NULL && L->cursor != L->front) {
+    L->cursor = L->cursor->prev;
+    L->index--;
+  } else if (L->cursor != NULL && L->cursor == L->front) {
+    L->cursor = L->front->prev;
+    L->index--;
   }
-  L->index--;
 }
 
 void moveNext(List L) {
-  if (cursor != NULL && cursor != L->back) {
-    cursor = cursor->next;
-  } else if (cursor != NULL && cursor == L->back) {
-    cursor = L->back->next;
+  if (L->cursor != NULL && L->cursor != L->back) {
+    L->cursor = L->cursor->next;
+    L->index++;
+  } else if (L->cursor != NULL && L->cursor == L->back) {
+    L->cursor = L->back->next;
+    L->index++;
   }
-  L->index++;
 }
 
 void prepend(List L, int data) {
@@ -161,10 +179,10 @@ void append(List L, int data) {
 }
 
 void insertBefore(List L, int data) {
-  if (L->length > 0 && cursor != NULL) {
+  if (L->length > 0 && L->cursor != NULL) {
 
     Node temp = L->front;
-    while (temp != cursor) {
+    while (temp != L->cursor) {
       temp = temp->next;
     }
     Node n = newNode(data);
@@ -184,9 +202,9 @@ void insertBefore(List L, int data) {
 }
 
 void insertAfter(List L, int data) {
-  if (L->length > 0 && cursor != NULL) {
+  if (L->length > 0 && L->cursor != NULL) {
     Node temp = L->front;
-    while (temp != cursor) {
+    while (temp != L->cursor) {
       temp = temp->next;
     }
     Node n = newNode(data);
@@ -225,9 +243,9 @@ void deleteBack(List L) {
 }
 
 void delete (List L) {
-  if (L->length > 0 && cursor != NULL && L->index >= 0) {
+  if (L->length > 0 && L->cursor != NULL && L->index >= 0) {
     Node temp = L->front;
-    while (temp != cursor) {
+    while (temp != L->cursor) {
       temp = temp->next;
     }
     if (temp == L->front) {
@@ -240,17 +258,31 @@ void delete (List L) {
     } else {
       temp->next->prev = temp->prev;
     }
-    cursor = NULL;
+    L->cursor = NULL;
     L->length--;
     freeNode(&temp);
   }
 }
 
-void print_list(List L) {
+List copyList(List L) {
+  List LL = newList();
+  Node temp = L->front;
+  while (temp != NULL) {
+    append(LL, temp->data);
+    temp = temp->next;
+  }
+  return LL;
+}
+
+void printList(FILE *out, List L) {
   Node n = NULL;
+  char array[length(L)];
 
   for (n = L->front; n != NULL; n = n->next) {
-    printf("%d .", n->data);
+    // itoa(n->data,a,10);
+    sprintf(array, "%d", n->data);
+    fputs(array, out);
+    printf(" ");
+    // printf("%d ",n->data);
   }
-  printf("\n");
 }
