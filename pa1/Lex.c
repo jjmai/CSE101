@@ -22,7 +22,7 @@ int main(int argc, char *argv[]) {
 
   char array[count][255];
   int array_index = 0;
-  while ((fscanf(fp, "%s", array[array_index])) != EOF) {
+  while ((fgets(array[array_index],sizeof(array[array_index]),fp))) {
     array_index++;
   }
   FILE *fp2 = stdout;
@@ -69,7 +69,7 @@ int main(int argc, char *argv[]) {
   //printList(fp2, L);
   moveFront(L);
   for (int i = 0; i < array_index; i++) {
-    fprintf(fp2,"%s\n",array[get(L)]);
+    fprintf(fp2,"%s",array[get(L)]);
     moveNext(L);
   }
   fclose(fp);
