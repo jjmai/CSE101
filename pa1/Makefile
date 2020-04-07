@@ -1,4 +1,4 @@
-CFLAGS =-Wpedantic -Wall -Werror -std=c99
+CFLAGS = -Wall -std=c99
 CC=clang $(CFLAGS)
 
 all		: 	Lex
@@ -16,8 +16,11 @@ List.o		: 	List.c
 		$(CC) -c List.c
 
 clean		:
-		rm -rf *.o Lex infer-out
+		rm -rf *.o Lex ListClient infer-out
 
 format		:
 		clang-format -i -style=file *.c *.h
+
+infer		:
+		make clean; infer-capture -- make; infer-analyze -- make 
 

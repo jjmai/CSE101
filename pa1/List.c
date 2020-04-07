@@ -1,4 +1,12 @@
+/**************************
+ * Jordan Mai,jmai12
+ * 2020 Spring CSE101 PA1
+ * List.c
+ * List ADT
+ **************************/
+
 #include "List.h"
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -19,10 +27,10 @@ typedef struct ListObj {
   int index;
 } ListObj;
 
-// Node cursor = NULL;
-
+// return newly allocated node
 Node newNode(int data) {
   Node n = malloc(sizeof(NodeObj));
+  assert(n);
   n->data = data;
   n->next = NULL;
   n->prev = NULL;
@@ -30,6 +38,7 @@ Node newNode(int data) {
   return n;
 }
 
+// free memomry from node
 void freeNode(Node *pN) {
   if (pN != NULL && *pN != NULL) {
     free(*pN);
@@ -37,8 +46,10 @@ void freeNode(Node *pN) {
   }
 }
 
+// returns  a List allocated
 List newList(void) {
   List l = malloc(sizeof(ListObj));
+  assert(l);
   l->front = l->back = NULL;
   l->length = 0;
   l->index = -1;
@@ -46,6 +57,7 @@ List newList(void) {
   return l;
 }
 
+// free memory of List
 void freeList(List *pL) {
   if (pL != NULL && *pL != NULL) {
     while (length(*pL) != 0) {
@@ -57,21 +69,24 @@ void freeList(List *pL) {
   *pL = NULL;
 }
 
+// return length of L
 int length(List L) { return L->length; }
 
+// return index of L
 int index(List L) {
   if (L->cursor != NULL) {
     Node temp = L->front;
-    L->index=0;
-    while(temp != L->cursor) {
+    L->index = 0;
+    while (temp != L->cursor) {
       L->index++;
-      temp=temp->next;
-}
+      temp = temp->next;
+    }
     return L->index;
   }
   return -1;
 }
 
+// return front L data , 0 if empty
 int front(List L) {
   if (L->length > 0) {
     return L->front->data;
@@ -80,6 +95,7 @@ int front(List L) {
   }
 }
 
+// return back L data, 0 if empty
 int back(List L) {
   if (L->length > 0) {
     return L->back->data;
@@ -87,6 +103,7 @@ int back(List L) {
   return 0;
 }
 
+// return data from cursor node , -1 if cursor doesn't exist
 int get(List L) {
   if (L->length > 0 && L->index >= 0) {
     return L->cursor->data;
@@ -95,6 +112,7 @@ int get(List L) {
   }
 }
 
+// returns 0 if A and B equal, 1 otherwise
 int equals(List A, List B) {
   Node temp1 = A->front;
   Node temp2 = B->front;
@@ -108,6 +126,7 @@ int equals(List A, List B) {
   return 1;
 }
 
+// reset L to newlist
 void clear(List L) {
   Node temp = L->front;
   while (temp != NULL) {
@@ -117,6 +136,8 @@ void clear(List L) {
   L->length = 0;
   L->index = -1;
 }
+
+// move cursor to front
 void moveFront(List L) {
   if (L != NULL) {
     L->cursor = L->front;
@@ -124,6 +145,7 @@ void moveFront(List L) {
   }
 }
 
+// move cursor to back
 void moveBack(List L) {
   if (L != NULL) {
     L->cursor = L->back;
@@ -131,6 +153,7 @@ void moveBack(List L) {
   }
 }
 
+// move cursor index -1
 void movePrev(List L) {
   if (L->cursor != NULL && L->cursor != L->front) {
     L->cursor = L->cursor->prev;
@@ -141,6 +164,7 @@ void movePrev(List L) {
   }
 }
 
+// move cursor index +1
 void moveNext(List L) {
   if (L->cursor != NULL && L->cursor != L->back) {
     L->cursor = L->cursor->next;
@@ -151,6 +175,7 @@ void moveNext(List L) {
   }
 }
 
+// create new nodeand add to front
 void prepend(List L, int data) {
   Node n = newNode(data);
   if (L == NULL) {
@@ -168,6 +193,7 @@ void prepend(List L, int data) {
   L->length++;
 }
 
+// create node and add data to back
 void append(List L, int data) {
   Node n = newNode(data);
   if (L == NULL) {
@@ -184,8 +210,9 @@ void append(List L, int data) {
   L->length++;
 }
 
+// create node and insert data before cursor node
 void insertBefore(List L, int data) {
-  if (L->length > 0 && L->cursor != NULL && L->index !=-1) {
+  if (L->length > 0 && L->cursor != NULL && L->index != -1) {
 
     Node temp = L->front;
     while (temp != L->cursor) {
@@ -207,8 +234,9 @@ void insertBefore(List L, int data) {
   }
 }
 
+// create node and insert data after cursor node
 void insertAfter(List L, int data) {
-  if (L->length > 0 && L->cursor != NULL && L->index !=-1) {
+  if (L->length > 0 && L->cursor != NULL && L->index != -1) {
     Node temp = L->front;
     while (temp != L->cursor) {
       temp = temp->next;
@@ -228,6 +256,7 @@ void insertAfter(List L, int data) {
   }
 }
 
+// delete front element
 void deleteFront(List L) {
   if (L->length > 0) {
     Node temp = L->front;
@@ -238,6 +267,7 @@ void deleteFront(List L) {
   }
 }
 
+// delete back element
 void deleteBack(List L) {
   if (L->length > 0) {
     Node temp = L->back;
@@ -248,6 +278,7 @@ void deleteBack(List L) {
   }
 }
 
+// delete and free cursor node
 void delete (List L) {
   if (L->length > 0 && L->cursor != NULL && L->index >= 0) {
     Node temp = L->front;
@@ -270,6 +301,7 @@ void delete (List L) {
   }
 }
 
+// copy L to newly created List
 List copyList(List L) {
   List LL = newList();
   Node temp = L->front;
@@ -280,14 +312,13 @@ List copyList(List L) {
   return LL;
 }
 
+// print List to out
 void printList(FILE *out, List L) {
   Node n = NULL;
   char array[length(L)];
 
   for (n = L->front; n != NULL; n = n->next) {
-    // itoa(n->data,a,10);
-    sprintf(array, "%d\n", n->data);
+    sprintf(array, "%d ", n->data);
     fputs(array, out);
-    // printf("%d ",n->data);
   }
 }
