@@ -61,6 +61,12 @@ int length(List L) { return L->length; }
 
 int index(List L) {
   if (L->cursor != NULL) {
+    Node temp = L->front;
+    L->index=0;
+    while(temp != L->cursor) {
+      L->index++;
+      temp=temp->next;
+}
     return L->index;
   }
   return -1;
@@ -114,34 +120,34 @@ void clear(List L) {
 void moveFront(List L) {
   if (L != NULL) {
     L->cursor = L->front;
-    L->index = 0;
+    L->index = index(L);
   }
 }
 
 void moveBack(List L) {
   if (L != NULL) {
     L->cursor = L->back;
-    L->index = L->length - 1;
+    L->index = index(L);
   }
 }
 
 void movePrev(List L) {
   if (L->cursor != NULL && L->cursor != L->front) {
     L->cursor = L->cursor->prev;
-    L->index--;
+    L->index = index(L);
   } else if (L->cursor != NULL && L->cursor == L->front) {
     L->cursor = L->front->prev;
-    L->index--;
+    L->index = index(L);
   }
 }
 
 void moveNext(List L) {
   if (L->cursor != NULL && L->cursor != L->back) {
     L->cursor = L->cursor->next;
-    L->index++;
+    L->index = index(L);
   } else if (L->cursor != NULL && L->cursor == L->back) {
     L->cursor = L->back->next;
-    L->index++;
+    L->index = index(L);
   }
 }
 
@@ -179,7 +185,7 @@ void append(List L, int data) {
 }
 
 void insertBefore(List L, int data) {
-  if (L->length > 0 && L->cursor != NULL) {
+  if (L->length > 0 && L->cursor != NULL && L->index !=-1) {
 
     Node temp = L->front;
     while (temp != L->cursor) {
@@ -202,7 +208,7 @@ void insertBefore(List L, int data) {
 }
 
 void insertAfter(List L, int data) {
-  if (L->length > 0 && L->cursor != NULL) {
+  if (L->length > 0 && L->cursor != NULL && L->index !=-1) {
     Node temp = L->front;
     while (temp != L->cursor) {
       temp = temp->next;
@@ -280,9 +286,8 @@ void printList(FILE *out, List L) {
 
   for (n = L->front; n != NULL; n = n->next) {
     // itoa(n->data,a,10);
-    sprintf(array, "%d", n->data);
+    sprintf(array, "%d\n", n->data);
     fputs(array, out);
-    printf(" ");
     // printf("%d ",n->data);
   }
 }
