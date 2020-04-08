@@ -57,10 +57,18 @@ List newList(void) {
   return l;
 }
 
+int isEmpty(List pL) {
+  if (pL == NULL) {
+    printf("ERROR: calling isEmpty()");
+    exit(1);
+  }
+  return (pL->length == 0);
+}
+
 // free memory of List
 void freeList(List *pL) {
   if (pL != NULL && *pL != NULL) {
-    while (length(*pL) != 0) {
+    while (!isEmpty(*pL)) {
       moveFront(*pL);
       delete (*pL);
     }
@@ -70,7 +78,13 @@ void freeList(List *pL) {
 }
 
 // return length of L
-int length(List L) { return L->length; }
+int length(List L) {
+  if (L) {
+    return L->length;
+  } else {
+    return -1;
+  }
+}
 
 // return index of L
 int index(List L) {
@@ -153,7 +167,7 @@ void moveBack(List L) {
   }
 }
 
-// move cursor index -1
+// move cursor index
 void movePrev(List L) {
   if (L->cursor != NULL && L->cursor != L->front) {
     L->cursor = L->cursor->prev;
@@ -164,7 +178,7 @@ void movePrev(List L) {
   }
 }
 
-// move cursor index +1
+// move cursor index
 void moveNext(List L) {
   if (L->cursor != NULL && L->cursor != L->back) {
     L->cursor = L->cursor->next;
@@ -260,8 +274,11 @@ void insertAfter(List L, int data) {
 void deleteFront(List L) {
   if (L->length > 0) {
     Node temp = L->front;
-    L->front = L->front->next;
-    temp->next->prev = temp->prev;
+    if(L->length !=1) {
+      L->front = L->front->next;
+      temp->next->prev = temp->prev;
+    }
+    // L->front->prev = NULL;
     L->length--;
     freeNode(&temp);
   }
@@ -271,8 +288,11 @@ void deleteFront(List L) {
 void deleteBack(List L) {
   if (L->length > 0) {
     Node temp = L->back;
-    L->back = L->back->prev;
-    temp->prev->next = temp->next;
+    if(L->length!=1) {
+      temp->prev->next = temp->next;
+      L->back = temp->prev;
+     }
+    // L->back->next = NULL;
     L->length--;
     freeNode(&temp);
   }

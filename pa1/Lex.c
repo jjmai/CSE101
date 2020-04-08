@@ -18,10 +18,10 @@ int main(int argc, char *argv[]) {
     exit(1);
   }
 
-  char lines;             // variable to sotre '\n'
-  int count = 0;          // variable to store line count
-  
-  int array_index = 0;    // index for array
+  char lines;    // variable to sotre '\n'
+  int count = 0; // variable to store line count
+
+  int array_index = 0; // index for array
 
   FILE *fp;
   FILE *fp2;
@@ -41,7 +41,7 @@ int main(int argc, char *argv[]) {
   }
   fclose(fp);
   fp = fopen(argv[1], "r"); // reopen input file to read again
-  char array[count][255]; 
+  char array[count][255];
 
   // read in line by line from file
   while ((fgets(array[array_index], sizeof(array[array_index]), fp))) {
