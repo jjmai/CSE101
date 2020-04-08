@@ -1,4 +1,19 @@
-CFLAGS = -Wall -std=c99
+#-------------------------------------------------
+# Jordan Mai, jmai12
+# CSE101 Spring, PA1
+#
+# Makefile for LIST ADT
+#
+# make			makes Lex
+# make ListClient	makes ListClient
+# make clean		removes object file
+# make infer		checks for errors
+# make format		auto formats all *.c *.h
+# make valgrind 	checks for memory leaks
+# make CheckClient	checks for memory leaks in CLient
+#--------------------------------------------------
+
+CFLAGS = -Wall -std=c11
 CC=clang $(CFLAGS)
 
 all		: 	Lex
@@ -23,4 +38,10 @@ format		:
 
 infer		:
 		make clean; infer-capture -- make; infer-analyze -- make 
+
+valgrind	:
+		valgrind --leak-check=full Lex
+
+checkClient	:
+		valgrind --leak-check=full ListClient
 
