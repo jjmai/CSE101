@@ -20,23 +20,28 @@ int main(int argc, char *argv[]) {
 
   char lines;             // variable to sotre '\n'
   int count = 0;          // variable to store line count
-  char array[count][255]; // 2d array store strings
+  
   int array_index = 0;    // index for array
 
   FILE *fp;
   FILE *fp2;
 
+  fp = fopen(argv[1], "r"); // open input file read
+  if (fp == NULL) {
+    fputs("ERROR, nothing to be read\n", stderr);
+  }
+
   fp2 = fopen(argv[2], "w"); // open output file write
 
-  fp = fopen(argv[1], "r"); // open input file read
   // loop to check number of newlines
-  for (lines = getc(fp); lines != EOF; lines = getc(fp)) {
+  while ((lines = fgetc(fp)) != EOF) {
     if (lines == '\n') {
       count++;
     }
   }
   fclose(fp);
   fp = fopen(argv[1], "r"); // reopen input file to read again
+  char array[count][255]; 
 
   // read in line by line from file
   while ((fgets(array[array_index], sizeof(array[array_index]), fp))) {
@@ -89,5 +94,6 @@ int main(int argc, char *argv[]) {
   }
   fclose(fp);
   fclose(fp2);
+  // clear(L);
   freeList(&L);
 }
