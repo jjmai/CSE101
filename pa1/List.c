@@ -128,6 +128,9 @@ int get(List L) {
 
 // returns 0 if A and B equal, 1 otherwise
 int equals(List A, List B) {
+  if (length(A) != length(B)) {
+    return 0;
+  }
   Node temp1 = A->front;
   Node temp2 = B->front;
   while (temp1 != NULL && temp2 != NULL) {
@@ -218,8 +221,8 @@ void append(List L, int data) {
     L->front = n;
   } else {
     L->back->next = n;
-    n->prev = L->back;
   }
+  n->prev = L->back;
   L->back = n;
   L->length++;
 }
