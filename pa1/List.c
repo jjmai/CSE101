@@ -274,11 +274,14 @@ void insertAfter(List L, int data) {
 void deleteFront(List L) {
   if (L->length > 0) {
     Node temp = L->front;
-    if(L->length !=1) {
+    if (L->length != 1) {
       L->front = L->front->next;
       temp->next->prev = temp->prev;
     }
-    // L->front->prev = NULL;
+    if (L->cursor == temp) {
+      L->cursor = NULL;
+      L->index = -1;
+    }
     L->length--;
     freeNode(&temp);
   }
@@ -288,11 +291,14 @@ void deleteFront(List L) {
 void deleteBack(List L) {
   if (L->length > 0) {
     Node temp = L->back;
-    if(L->length!=1) {
+    if (L->length != 1) {
       temp->prev->next = temp->next;
       L->back = temp->prev;
-     }
-    // L->back->next = NULL;
+    }
+    if (L->cursor == temp) {
+      L->cursor = NULL;
+      L->index = -1;
+    }
     L->length--;
     freeNode(&temp);
   }
