@@ -117,12 +117,13 @@ int back(List L) {
   return 0;
 }
 
-// return data from cursor node , -1 if cursor doesn't exist
+// return data from cursor node , exit if cursor doesn't exist
 int get(List L) {
-  if (L->length > 0 && L->index >= 0) {
+  if (L->length > 0 && L->index >= 0 && L->cursor !=NULL) {
     return L->cursor->data;
   } else {
-    return -1;
+    printf("ERROR, on get()");
+    exit(1);
   }
 }
 
@@ -196,7 +197,7 @@ void moveNext(List L) {
 void prepend(List L, int data) {
   Node n = newNode(data);
   if (L == NULL) {
-    printf("ERROR");
+    printf("ERROR, on prepend()");
     exit(1);
   }
   if (L->length == 0) {
@@ -214,7 +215,7 @@ void prepend(List L, int data) {
 void append(List L, int data) {
   Node n = newNode(data);
   if (L == NULL) {
-    printf("ERROR");
+    printf("ERROR, on append()");
     exit(1);
   }
   if (L->length == 0) {
@@ -287,7 +288,7 @@ void deleteFront(List L) {
     }
     L->length--;
     freeNode(&temp);
-  }
+  } 
 }
 
 // delete back element
@@ -327,7 +328,7 @@ void delete (List L) {
     L->cursor = NULL;
     L->length--;
     freeNode(&temp);
-  }
+  } 
 }
 
 // copy L to newly created List
