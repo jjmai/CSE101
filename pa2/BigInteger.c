@@ -1,6 +1,7 @@
 #include "BigInteger.h"
 #include "List.h"
 #include <inttypes.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -27,7 +28,8 @@ BigInteger newBigInteger() {
 
 void freeBigInteger(BigInteger *pN) {
   if (pN != NULL && *pN != NULL) {
-    free(pN);
+    freeList(&(*pN)->L);
+    free(*pN);
   }
 }
 
@@ -50,10 +52,15 @@ int compare(BigInteger A, BigInteger B) {
   if (sign(A) == -1 && sign(B) == 1)
     return -1;
 
-  if (length(A->L) > length(B->L))
+  if (length(A->L) > length(B->L) && sign(A) == 1 && sign(B) == 1)
     return 1;
-  if (length(A->L) < length(B->L))
+  if (length(A->L) < length(B->L) && sign(A) == 1 && sign(B) == 1)
     return -1;
+
+  if (length(A->L) > length(B->L) && sign(A) == -1 && sign(B) == -1)
+    return -1;
+  if (length(A->L) < length(B->L) && sign(A) == -1 && sign(B) == -1)
+    return 1;
 
   if (front(A->L) > front(B->L))
     return 1;
@@ -62,6 +69,7 @@ int compare(BigInteger A, BigInteger B) {
 
   if (front(A->L) == front(B->L))
     return 0;
+  exit(1);
 }
 
 int equals(BigInteger A, BigInteger B) {
@@ -73,7 +81,7 @@ int equals(BigInteger A, BigInteger B) {
 }
 
 void makeZero(BigInteger N) {
-  l_clear(N->L);
+  clear(N->L);
   N->carry = 0;
   N->sign = 0;
 }
@@ -90,12 +98,15 @@ BigInteger stringToBigInteger(char *s) {
   BigInteger b = newBigInteger();
   char auex;
   char temp[POWER];
-  char temp1[POWER];
-  int neg = 0, count = POWER - 1;
+  int neg = 0, count2 = 0;
+  int count = POWER - 1;
 
   if (s[0] == '-') {
     b->sign = -1;
     neg++;
+  } else if (s[0] == '+') {
+    b->sign = 1;
+    neg++
   } else {
     b->sign = 1;
   }
@@ -107,40 +118,48 @@ BigInteger stringToBigInteger(char *s) {
     if (count == 0) {
       prepend(b->L, atol(temp));
       count = POWER - 1;
+      count2 = 0;
     } else {
       count--;
+      count2++;
     }
   }
   char temp2[POWER];
-  if (count > 0) {
-    for (int i = neg; i < POWER - count; i++) {
+  for (int i = 0; i < count2; i++) {
+    if (i == 0) {
       auex = s[i];
-      temp2[i] = auex;
+      temp2[i] = s[i];
+      prepend(b->L, atol(temp2));
+    } else {
+      moveFront(b->L);
+      auex = s[i];
+      temp2[i] = s[i];
+      insertAfter(b->L, atol(temp2));
     }
-    prepend(b->L, atol(temp2));
   }
   moveFront(b->L);
   while (get(b->L) == 0) {
     deleteFront(b->L);
     moveFront(b->L);
   }
+
   return b;
 }
 
 BigInteger copy(BigInteger N) {
   BigInteger b = newBigInteger();
   b->L = copyList(N->L);
-  b->sign = N->sign;
+  b->sign = sign(N);
 
   return b;
 }
 
 void add(BigInteger S, BigInteger A, BigInteger B) {
-  makeZero(S);
   BigInteger AA = copy(A);
   BigInteger BB = copy(B);
+  makeZero(S);
 
-  if ((AA->sign == 1 && B->sign == -1)) {
+  if ((AA->sign == 1 && BB->sign == -1)) {
     negate(BB);
     subtract(S, AA, BB);
   } else if (AA->sign == -1 && BB->sign == 1) {
@@ -216,20 +235,24 @@ BigInteger sum(BigInteger A, BigInteger B) {
 }
 
 void subtract(BigInteger D, BigInteger A, BigInteger B) {
-  BigInteger AA, BB;
-  if (compare(A, B) == -1) {
-    AA = copy(B);
-    BB = copy(A);
-    D->sign = -1;
-  } else {
-    AA = copy(A);
-    BB = copy(B);
-  }
-
+  BigInteger AA = copy(A);
+  BigInteger BB = copy(B);
+  makeZero(D);
   negate(BB);
   if ((sign(AA) == 1 && sign(BB) == 1) || (sign(AA) == -1 && sign(BB) == -1)) {
     add(D, AA, BB);
   } else {
+    if (compare(A, B) == -1) {
+      AA = copy(B);
+      BB = copy(A);
+      D->sign = -1;
+    } else {
+      AA = copy(A);
+      BB = copy(B);
+      D->sign = 1;
+    }
+    negate(BB);
+
     int carry = 0, temp = 0, a = 0, b = 0;
 
     moveBack(AA->L);
@@ -323,7 +346,7 @@ void multiply(BigInteger P, BigInteger A, BigInteger B) {
 
   moveBack(big->L);
   moveBack(small->L);
-  BigInteger b_temp = newBigInteger();
+  BigInteger b_temp;
 
   for (int i = 0; i < temp; i++) {
     b_temp = newBigInteger();
@@ -335,6 +358,7 @@ void multiply(BigInteger P, BigInteger A, BigInteger B) {
       a = get(big->L);
       if (b == EMPTY) {
         b = 1;
+        ab *= b;
       } else {
         ab = a * b;
       }
@@ -364,6 +388,7 @@ void multiply(BigInteger P, BigInteger A, BigInteger B) {
     moveBack(big->L);
     add(P, P, b_temp);
   }
+  P->sign = sign(AA) * sign(BB);
 }
 
 BigInteger prod(BigInteger A, BigInteger B) {
@@ -372,12 +397,34 @@ BigInteger prod(BigInteger A, BigInteger B) {
     multiply(b, A, B);
     return b;
   }
+  exit(1);
 }
 
 void printBigInteger(FILE *out, BigInteger N) {
   if (sign(N) == -1) {
-    printf("-");
+    fprintf(out, "%s", "-");
   }
-  printList(out, N->L);
-  printf("\n");
+  int count = 1;
+  bool front = true;
+  moveFront(N->L);
+  while (get(N->L) != EMPTY) {
+    count = 1;
+    if (get(N->L) < BASE / 10) {
+      while (count < BASE / 10 && front == false) {
+        fprintf(out, "%d", 0);
+        count *= 10;
+      }
+    }
+    if (get(N->L) != 0) {
+      front = false;
+    }
+    if (front == false) {
+      fprintf(out, "%ld", get(N->L));
+    }
+    moveNext(N->L);
+  }
+  if (front == true) {
+    fprintf(out, "%d", 0);
+  }
+  fprintf(out, "%s", "\n\n");
 }

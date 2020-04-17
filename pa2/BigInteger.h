@@ -1,3 +1,4 @@
+#include <stdio.h>
 #ifndef _BIGINTEGER_H_
 #define _BIGINTEGER_H_
 
@@ -29,4 +30,7 @@ BigInteger diff(BigInteger A, BigInteger B);
 
 void multiply(BigInteger P, BigInteger A, BigInteger B);
 
+void printBigInteger(FILE *out, BigInteger N);
+
+BigInteger prod(BigInteger A, BigInteger B);
 #endif

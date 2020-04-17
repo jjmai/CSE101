@@ -16,7 +16,8 @@ List newList(void);      // Creates and returns a new empty List.
 void freeList(List *pL); // Frees all heap memory associated with *pL, and sets
 
 long length(List L); // Returns the number of elements in L.
-long l_index(List L); // Returns index of cursor element if defined, -1 otherwise.
+long l_index(
+    List L);        // Returns index of cursor element if defined, -1 otherwise.
 long front(List L); // Returns front element of L. Pre: length()>0
 long back(List L);  // Returns back element of L. Pre: length()>0
 long get(List L);   // Returns cursor element of L. Pre: length()>0, index()>=0

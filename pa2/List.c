@@ -133,10 +133,9 @@ long l_equals(List A, List B) {
 }
 
 void clear(List L) {
-  Node temp = L->front;
-  while (temp != NULL) {
+  while (length(L) > 0) {
+    moveFront(L);
     delete (L);
-    temp = temp->next;
   }
   L->length = 0;
   L->index = -1;
@@ -321,7 +320,7 @@ void printList(FILE *out, List L) {
   char array[length(L)];
 
   for (n = L->front; n != NULL; n = n->next) {
-    sprintf(array, "%d ", n->data);
+    sprintf(array, "%ld ", n->data);
     fputs(array, out);
   }
 }
