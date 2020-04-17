@@ -30,6 +30,7 @@ void freeBigInteger(BigInteger *pN) {
   if (pN != NULL && *pN != NULL) {
     freeList(&(*pN)->L);
     free(*pN);
+    *pN = NULL;
   }
 }
 
@@ -223,6 +224,8 @@ void add(BigInteger S, BigInteger A, BigInteger B) {
       S->sign = 1;
     }
   }
+  freeBigInteger(&AA);
+  freeBigInteger(&BB);
 }
 
 BigInteger sum(BigInteger A, BigInteger B) {
@@ -312,6 +315,8 @@ void subtract(BigInteger D, BigInteger A, BigInteger B) {
       D->sign = -1;
     }
   }
+  freeBigInteger(&AA);
+  freeBigInteger(&BB);
 }
 
 BigInteger diff(BigInteger A, BigInteger B) {
@@ -389,6 +394,9 @@ void multiply(BigInteger P, BigInteger A, BigInteger B) {
     add(P, P, b_temp);
   }
   P->sign = sign(AA) * sign(BB);
+  freeBigInteger(&AA);
+  freeBigInteger(&BB);
+  freeBigInteger(&b_temp);
 }
 
 BigInteger prod(BigInteger A, BigInteger B) {

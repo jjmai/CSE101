@@ -49,6 +49,11 @@ int main(int argc, char *argv[]) {
   BigInteger aaa = prod(aa, stringToBigInteger("9"));
   BigInteger bbb = prod(bb, stringToBigInteger("16"));
   printBigInteger(outfile, sum(aaa, bbb));
+
   fclose(infile);
   fclose(outfile);
+  freeBigInteger(&a);
+  freeBigInteger(&b);
+  freeBigInteger(&aa);
+  freeBigInteger(&bb);
 }
