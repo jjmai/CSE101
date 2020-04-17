@@ -106,7 +106,7 @@ BigInteger stringToBigInteger(char *s) {
     neg++;
   } else if (s[0] == '+') {
     b->sign = 1;
-    neg++
+    neg++;
   } else {
     b->sign = 1;
   }
