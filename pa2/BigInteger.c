@@ -97,6 +97,7 @@ void negate(BigInteger N) {
 
 BigInteger stringToBigInteger(char *s) {
   BigInteger b = newBigInteger();
+
   char auex;
   char temp[POWER];
   int neg = 0, count2 = 0;
@@ -114,7 +115,6 @@ BigInteger stringToBigInteger(char *s) {
 
   for (int i = strlen(s) - 1; i >= neg; i--) {
     auex = s[i];
-
     temp[count] = auex;
     if (count == 0) {
       prepend(b->L, atol(temp));
@@ -125,19 +125,14 @@ BigInteger stringToBigInteger(char *s) {
       count2++;
     }
   }
-  char temp2[POWER];
-  for (int i = 0; i < count2; i++) {
-    if (i == 0) {
-      auex = s[i];
-      temp2[i] = s[i];
-      prepend(b->L, atol(temp2));
-    } else {
-      moveFront(b->L);
-      auex = s[i];
-      temp2[i] = s[i];
-      insertAfter(b->L, atol(temp2));
-    }
+  char temp2[POWER + 1];
+  int count3 = 0;
+  for (int i = neg; i < count2 + neg; i++) {
+    auex = s[i];
+    temp2[count3++] = auex;
   }
+  prepend(b->L, atol(temp2));
+
   moveFront(b->L);
   while (get(b->L) == 0) {
     deleteFront(b->L);
@@ -175,8 +170,8 @@ void add(BigInteger S, BigInteger A, BigInteger B) {
 
     for (int i = 0; i < temp; i++) {
       int ab = 0;
-      a = l_index(AA->L) != -1 ? get(AA->L) : EMPTY;
-      b = l_index(BB->L) != -1 ? get(BB->L) : EMPTY;
+      a = index(AA->L) != -1 ? get(AA->L) : EMPTY;
+      b = index(BB->L) != -1 ? get(BB->L) : EMPTY;
 
       if (a == EMPTY) {
         ab += 0;
@@ -264,8 +259,8 @@ void subtract(BigInteger D, BigInteger A, BigInteger B) {
 
     for (int i = 0; i < temp; i++) {
       int ab = 0;
-      a = l_index(AA->L) != -1 ? get(AA->L) : EMPTY;
-      b = l_index(BB->L) != -1 ? get(BB->L) : EMPTY;
+      a = index(AA->L) != -1 ? get(AA->L) : EMPTY;
+      b = index(BB->L) != -1 ? get(BB->L) : EMPTY;
 
       if (a == EMPTY) {
         ab += 0;
@@ -356,8 +351,8 @@ void multiply(BigInteger P, BigInteger A, BigInteger B) {
   for (int i = 0; i < temp; i++) {
     b_temp = newBigInteger();
     ab = 0, carry = 0;
-    a = l_index(big->L) != EMPTY ? get(big->L) : EMPTY;
-    b = l_index(small->L) != EMPTY ? get(small->L) : EMPTY;
+    a = index(big->L) != EMPTY ? get(big->L) : EMPTY;
+    b = index(small->L) != EMPTY ? get(small->L) : EMPTY;
 
     while (get(big->L) != EMPTY) {
       a = get(big->L);
