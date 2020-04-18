@@ -6,7 +6,6 @@
 
 extern long POWER;
 extern long BASE;
-#define MAX 65536 - 1
 
 int main(int argc, char *argv[]) {
   if (argc != 3) {
@@ -21,43 +20,24 @@ int main(int argc, char *argv[]) {
   char word[255];
   fgets(word, 10, infile);
   long b1 = atol(word);
-  if (b1 >= 0 || b1 <= 1000000000) {
-    BASE = b1;
-    POWER = strlen(word) - 2;
-  } else {
-    fputs("ERROR base too big or too small.\n", stderr);
-    exit(1);
-  }
-  //char word2[255];
+  //BASE = b1;
+  //POWER = strlen(word) - 2;
   int ch;
   char *str;
   int len = 0;
-  int size = 255;
-  str = malloc(size);
+  str = malloc(b1+1);
   while (EOF != (ch = fgetc(infile)) && ch != '\n') {
     str[len++] = ch;
-    if (len == size - 1) {
-      size += size;
-      str = realloc(str, size);
-    }
   }
   str[len] = '\0';
   BigInteger a = stringToBigInteger(str);
-
-  //  fscanf(infile, "%s", word2);
-  // BigInteger a = stringToBigInteger(word2);
   fgets(word, 10, infile);
-  // fscanf(infile, "%s", word2);
+  b1=atol(word);
   char *str2;
   int len2 = 0;
-  int size2 = 255;
-  str2 = malloc(size2);
+  str2 = malloc(b1+1);
   while (EOF != (ch = fgetc(infile)) && ch != '\n') {
     str2[len2++] = ch;
-    if (len2 == size2 - 1) {
-      size2 += size2;
-      str2 = realloc(str2, size2);
-    }
   }
   str2[len2] = '\0';
 
@@ -65,6 +45,7 @@ int main(int argc, char *argv[]) {
 
   printBigInteger(outfile, a);
   printBigInteger(outfile, b);
+  
   printBigInteger(outfile, sum(a, b));
   printBigInteger(outfile, diff(a, b));
   printBigInteger(outfile, diff(a, a));

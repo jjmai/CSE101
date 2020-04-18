@@ -7,8 +7,8 @@
 #include <string.h>
 
 #define EMPTY -1
-long POWER;
-long BASE;
+long POWER =9;
+long BASE = 1000000000;
 
 typedef struct BigIntegerObj {
   int sign;
@@ -113,7 +113,7 @@ BigInteger stringToBigInteger(char *s) {
     b->sign = 1;
   }
 
-  for (int i = strlen(s) - 1; i >= neg; i--) {
+  for (long i = strlen(s) - 1; i >= neg; i--) {
     auex = s[i];
     temp[count] = auex;
     if (count == 0) {
@@ -125,9 +125,10 @@ BigInteger stringToBigInteger(char *s) {
       count2++;
     }
   }
+
   char temp2[POWER + 1];
-  int count3 = 0;
-  for (int i = neg; i < count2 + neg; i++) {
+  long count3 = 0;
+  for (long i = neg; i < count2 + neg; i++) {
     auex = s[i];
     temp2[count3++] = auex;
   }
@@ -163,13 +164,13 @@ void add(BigInteger S, BigInteger A, BigInteger B) {
     subtract(S, BB, AA);
 
   } else {
-    int carry = 0, temp = 0, a = 0, b = 0;
+    long carry = 0, temp = 0, a = 0, b = 0;
     moveBack(AA->L);
     moveBack(BB->L);
     temp = length(AA->L) >= length(BB->L) ? length(AA->L) : length(BB->L);
 
-    for (int i = 0; i < temp; i++) {
-      int ab = 0;
+    for (long i = 0; i < temp; i++) {
+      long ab = 0;
       a = index(AA->L) != -1 ? get(AA->L) : EMPTY;
       b = index(BB->L) != -1 ? get(BB->L) : EMPTY;
 
@@ -251,14 +252,14 @@ void subtract(BigInteger D, BigInteger A, BigInteger B) {
     }
     negate(BB);
 
-    int carry = 0, temp = 0, a = 0, b = 0;
+    long carry = 0, temp = 0, a = 0, b = 0;
 
     moveBack(AA->L);
     moveBack(BB->L);
     temp = length(AA->L) >= length(BB->L) ? length(AA->L) : length(BB->L);
 
-    for (int i = 0; i < temp; i++) {
-      int ab = 0;
+    for (long i = 0; i < temp; i++) {
+      long ab = 0;
       a = index(AA->L) != -1 ? get(AA->L) : EMPTY;
       b = index(BB->L) != -1 ? get(BB->L) : EMPTY;
 
@@ -310,6 +311,8 @@ void subtract(BigInteger D, BigInteger A, BigInteger B) {
       D->sign = -1;
     }
   }
+  if (compare(AA, BB) == 0)
+    D->sign = 0;
   freeBigInteger(&AA);
   freeBigInteger(&BB);
 }
@@ -329,7 +332,7 @@ void multiply(BigInteger P, BigInteger A, BigInteger B) {
   makeZero(P);
 
   P->sign = sign(AA) * sign(BB);
-  int a = 0, b = 0, ab = 0, carry = 0, temp = 0;
+  long a = 0, b = 0, ab = 0, carry = 0, temp = 0;
   moveBack(AA->L);
   moveBack(BB->L);
 
@@ -356,6 +359,7 @@ void multiply(BigInteger P, BigInteger A, BigInteger B) {
 
     while (get(big->L) != EMPTY) {
       a = get(big->L);
+  //    printf("%ld %ld !",a,b);
       if (b == EMPTY) {
         b = 1;
         ab *= b;
