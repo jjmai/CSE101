@@ -7,7 +7,7 @@
 #include <string.h>
 
 #define EMPTY -1
-long POWER =9;
+long POWER = 9;
 long BASE = 1000000000;
 
 typedef struct BigIntegerObj {
@@ -62,15 +62,22 @@ int compare(BigInteger A, BigInteger B) {
     return -1;
   if (length(A->L) < length(B->L) && sign(A) == -1 && sign(B) == -1)
     return 1;
+  moveFront(A->L);
+  moveFront(B->L);
+  while (get(A->L) != EMPTY && get(B->L) != EMPTY) {
+    if (get(A->L) > (get(B->L))) {
+      return 1;
+    }
+    if (get(A->L) < get(B->L)) {
+      return -1;
+    }
+    moveNext(A->L);
+    moveNext(B->L);
+  }
 
-  if (front(A->L) > front(B->L))
-    return 1;
-  if (front(A->L) < front(B->L))
-    return -1;
+  return 0;
 
-  if (front(A->L) == front(B->L))
-    return 0;
-  exit(1);
+  return 0;
 }
 
 int equals(BigInteger A, BigInteger B) {
@@ -238,10 +245,12 @@ void subtract(BigInteger D, BigInteger A, BigInteger B) {
   BigInteger BB = copy(B);
   makeZero(D);
   negate(BB);
+  
   if ((sign(AA) == 1 && sign(BB) == 1) || (sign(AA) == -1 && sign(BB) == -1)) {
     add(D, AA, BB);
   } else {
-    if (compare(A, B) == -1) {
+    negate(BB);
+    if (compare(AA, BB) == -1) {
       AA = copy(B);
       BB = copy(A);
       D->sign = -1;
@@ -359,7 +368,7 @@ void multiply(BigInteger P, BigInteger A, BigInteger B) {
 
     while (get(big->L) != EMPTY) {
       a = get(big->L);
-  //    printf("%ld %ld !",a,b);
+      //    printf("%ld %ld !",a,b);
       if (b == EMPTY) {
         b = 1;
         ab *= b;
