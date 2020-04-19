@@ -81,7 +81,7 @@ long length(List L) {
   }
 }
 
-long l_index(List L) {
+long index(List L) {
   if (L->cursor != NULL) {
     Node temp = L->front;
     L->index = 0;
@@ -143,34 +143,34 @@ void clear(List L) {
 void moveFront(List L) {
   if (L != NULL) {
     L->cursor = L->front;
-    L->index = l_index(L);
+    L->index = index(L);
   }
 }
 
 void moveBack(List L) {
   if (L != NULL) {
     L->cursor = L->back;
-    L->index = l_index(L);
+    L->index = index(L);
   }
 }
 
 void movePrev(List L) {
   if (L->cursor != NULL && L->cursor != L->front) {
     L->cursor = L->cursor->prev;
-    L->index = l_index(L);
+    L->index = index(L);
   } else if (L->cursor != NULL && L->cursor == L->front) {
     L->cursor = L->front->prev;
-    L->index = l_index(L);
+    L->index = index(L);
   }
 }
 
 void moveNext(List L) {
   if (L->cursor != NULL && L->cursor != L->back) {
     L->cursor = L->cursor->next;
-    L->index = l_index(L);
+    L->index = index(L);
   } else if (L->cursor != NULL && L->cursor == L->back) {
     L->cursor = L->back->next;
-    L->index = l_index(L);
+    L->index = index(L);
   }
 }
 
