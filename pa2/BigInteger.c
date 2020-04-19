@@ -90,7 +90,7 @@ int compare(BigInteger A, BigInteger B) {
 
   return 0;
 }
-
+// equals
 int equals(BigInteger A, BigInteger B) {
   if (compare(A, B) == 0) {
     return 1;
@@ -98,7 +98,7 @@ int equals(BigInteger A, BigInteger B) {
     return 0;
   }
 }
-
+// zero clear list
 void makeZero(BigInteger N) {
   clear(N->L);
   // N->carry = 0;
@@ -116,7 +116,7 @@ void negate(BigInteger N) {
 // converts string to a long of bigInt
 BigInteger stringToBigInteger(char *s) {
   BigInteger b = newBigInteger();
-  char auex;
+  char auex; // store one char from s
   char temp[POWER];
   for (int i = 0; i < POWER + 1; i++) {
     temp[i] = '\0';
@@ -125,7 +125,7 @@ BigInteger stringToBigInteger(char *s) {
   int count = POWER - 1;
   long num = 0;
 
-  // if there is a sign in front, increment counter
+  // if there is a sign in front, increment counter neg
   // so we don't push that in a node
   if (s[0] == '-') {
     b->sign = -1;
@@ -150,12 +150,12 @@ BigInteger stringToBigInteger(char *s) {
       count2++;
     }
   }
-  // prepend remainders
   char temp2[POWER + 1];
   for (int i = 0; i < POWER + 1; i++) {
     temp2[i] = '\0';
   }
   long count3 = 0;
+  // prepend remainder
   for (long i = neg; i < count2 + neg; i++) {
     auex = s[i];
     temp2[count3++] = auex;
@@ -171,7 +171,7 @@ BigInteger stringToBigInteger(char *s) {
 
   return b;
 }
-
+// return a new copied bigint
 BigInteger copy(BigInteger N) {
   BigInteger b = newBigInteger();
   b->L = copyList(N->L);
@@ -261,12 +261,12 @@ void subtract(BigInteger D, BigInteger A, BigInteger B) {
   BigInteger AA = copy(A);
   BigInteger BB = copy(B);
   makeZero(D);
-  negate(BB);
+  negate(BB); // negate to subtract
   // if both A B same signs then add
   if ((sign(AA) == 1 && sign(BB) == 1) || (sign(AA) == -1 && sign(BB) == -1)) {
     add(D, AA, BB);
   } else {
-    negate(BB);
+    negate(BB); // negate sign to compare
     // compare AA,BB and make the bigger number AA
     if (compare(AA, BB) == -1) {
       AA = copy(B);
@@ -284,7 +284,7 @@ void subtract(BigInteger D, BigInteger A, BigInteger B) {
     moveBack(AA->L);
     moveBack(BB->L);
     temp = length(AA->L) >= length(BB->L) ? length(AA->L) : length(BB->L);
-
+    // go through and subtract vertically
     for (long i = 0; i < temp; i++) {
       long ab = 0;
       a = index(AA->L) != -1 ? get(AA->L) : EMPTY;
@@ -353,12 +353,12 @@ void subtract(BigInteger D, BigInteger A, BigInteger B) {
   freeBigInteger(&AA);
   freeBigInteger(&BB);
 }
-
+// return difference bigint
 BigInteger diff(BigInteger A, BigInteger B) {
   if (A && B) {
     BigInteger b = newBigInteger();
     subtract(b, A, B);
-  
+
     return b;
   }
   return NULL;
@@ -389,7 +389,7 @@ void multiply(BigInteger P, BigInteger A, BigInteger B) {
   moveBack(big->L);
   moveBack(small->L);
   BigInteger b_temp;
-
+  // go through big, and multiply each by node
   for (int i = 0; i < temp; i++) {
     b_temp = newBigInteger();
     ab = 0, carry = 0;
@@ -436,6 +436,7 @@ void multiply(BigInteger P, BigInteger A, BigInteger B) {
   freeBigInteger(&b_temp);
 }
 
+// return product Big Int
 BigInteger prod(BigInteger A, BigInteger B) {
   if (A && B) {
     BigInteger b = newBigInteger();

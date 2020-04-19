@@ -88,6 +88,8 @@ int main(int argc, char *argv[]) {
   freeBigInteger(&bb);
   freeBigInteger(&c);
   freeBigInteger(&e);
+  freeBigInteger(&sixteen);
+  freeBigInteger(&nine);
   free(str);
   free(str2);
 }
