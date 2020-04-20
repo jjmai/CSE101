@@ -65,6 +65,7 @@ int main(int argc, char *argv[]) {
   printBigInteger(outfile, prod(a, b));
   printBigInteger(outfile, prod(a, a));
   printBigInteger(outfile, prod(b, b));
+
   BigInteger c = newBigInteger();
   BigInteger e = newBigInteger();
   multiply(c, a, a);

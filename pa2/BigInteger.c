@@ -16,8 +16,8 @@
 #include <string.h>
 
 #define EMPTY -1 // determine if node is NULL
-long POWER = 1;
-long BASE = 10;
+long POWER = 9;
+long BASE = 1000000000;
 
 typedef struct BigIntegerObj {
   int sign;
@@ -447,22 +447,29 @@ BigInteger prod(BigInteger A, BigInteger B) {
 }
 
 void printBigInteger(FILE *out, BigInteger N) {
-  // printList(stdout, N->L);
+  //printList(stdout, N->L);
   if (sign(N) == -1) {
     fprintf(out, "%s", "-");
   }
-
-  int count = 1;
+  long count = 0,digits=0;
   bool front = true;
   moveFront(N->L);
   while (get(N->L) != EMPTY) {
-    count = 1;
+    digits=0;
+    count = get(N->L);
+    //get length of bigInt
+    while(count!=0) {
+      count=count/10;
+      digits++;
+     }
+     if(get(N->L)==0) {
+       digits=1;
+    }
     // if number in node not length of POWER
     // prepend a zero to fill in
-    if (get(N->L) < BASE / 10) {
-      while (count < BASE / 10 && front == false) {
-        fprintf(out, "%d", 0);
-        count *= 10;
+    if (get(N->L) < BASE / 10 && front==false) {
+      for(int i=0;i<POWER-digits;i++) {
+        fprintf(out,"%s","0");
       }
     }
     // if zero then do nothing
