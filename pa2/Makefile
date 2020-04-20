@@ -46,7 +46,7 @@ List.o		:	List.c
 		$(CC) -c List.c
 
 clean		:	
-		rm -rf *.o Arithmetic BigIntegerTest 
+		rm -rf *.o Arithmetic BigIntegerTest infer-out 
 
 format		:
 		clang-format -i -style=file *.c *.h
