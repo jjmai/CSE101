@@ -28,6 +28,13 @@ Graph newGraph(int n) {
 }
 void freeGraph(Graph *pG) {
   if (pG != NIL && *pG != NIL) {
+    for (int i = 0; i < getSize(*pG); i++) {
+      if (length((*pG)->list[i]) > 0) {
+        freeList(&(*pG)->list[i]);
+      }
+    }
+    free(*pG);
+    *pG = NULL;
   }
 }
 
@@ -88,6 +95,28 @@ void getPath(List L, Graph G, int u) {
   } else {
     getPath(L, G, getParent(G, u));
     append(L, u);
+  }
+}
+
+void makeNull(Graph G) {
+  if (G == NULL) {
+    printf("ERROR on makeNULL");
+    exit(1);
+  }
+  G->source = 0;
+  G->size = 0;
+  G->order = 0;
+  for (int i = 0; i <= G->size; i++) {
+    if (length(G->list[i]) > 0) {
+      G->color[i] = '\0';
+      G->distance[i] = '\0';
+      G->parent[i] = '\0';
+      moveFront(G->list[i]);
+      while (get(G->list[i]) != EMPTY) {
+        delete (G->list[i]);
+        moveFront(G->list[i]);
+      }
+    }
   }
 }
 
