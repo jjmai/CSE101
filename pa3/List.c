@@ -1,25 +1,26 @@
-/**************************
- *  * Jordan Mai,jmai12
- *  * 2020 Spring CSE101 PA1
- *  * List.c
- *  * List ADT
- *  **************************/
-
 #include "List.h"
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-typedef struct NodeObj {
-  long data;
+    typedef struct NodeObj {
+  int data;
   struct NodeObj *next;
   struct NodeObj *prev;
 } NodeObj;
 
 typedef NodeObj *Node;
 
-Node newNode(long data) {
+typedef struct ListObj {
+  Node front;
+  Node back;
+  Node cursor;
+  int length;
+  int index;
+} ListObj;
+
+Node newNode(int data) {
   Node n = malloc(sizeof(NodeObj));
   assert(n);
   n->data = data;
@@ -46,7 +47,7 @@ List newList(void) {
   return l;
 }
 
-long isEmpty(List pL) {
+int isEmpty(List pL) {
   if (pL == NULL) {
     printf("ERROR: calling isEmpty()");
     exit(1);
@@ -65,7 +66,7 @@ void freeList(List *pL) {
   *pL = NULL;
 }
 
-long length(List L) {
+int length(List L) {
   if (L) {
     return L->length;
   } else {
@@ -73,7 +74,7 @@ long length(List L) {
   }
 }
 
-long index(List L) {
+int index(List L) {
   if (L->cursor != NULL) {
     Node temp = L->front;
     L->index = 0;
@@ -86,21 +87,21 @@ long index(List L) {
   return -1;
 }
 
-long front(List L) {
+int front(List L) {
   if (L->length > 0) {
     return L->front->data;
   } else {
     return 0;
   }
 }
-long back(List L) {
+int back(List L) {
   if (L->length > 0) {
     return L->back->data;
   }
   return 0;
 }
 
-long get(List L) {
+int get(List L) {
   if (L->length > 0 && L->index >= 0) {
     return L->cursor->data;
   } else {
@@ -108,7 +109,7 @@ long get(List L) {
   }
 }
 
-long l_equals(List A, List B) {
+int l_equals(List A, List B) {
   if (length(A) != length(B)) {
     return 0;
   }
@@ -166,10 +167,10 @@ void moveNext(List L) {
   }
 }
 
-void prepend(List L, long data) {
+void prepend(List L, int data) {
   Node n = newNode(data);
   if (L == NULL) {
-    printf("ERROR");
+    printf("ERROR on prepend");
     exit(1);
   }
   if (L->length == 0) {
@@ -183,10 +184,10 @@ void prepend(List L, long data) {
   L->length++;
 }
 
-void append(List L, long data) {
+void append(List L, int data) {
   Node n = newNode(data);
   if (L == NULL) {
-    printf("ERROR");
+    printf("ERROR on append");
     exit(1);
   }
   if (L->length == 0) {
@@ -199,7 +200,7 @@ void append(List L, long data) {
   L->length++;
 }
 
-void insertBefore(List L, long data) {
+void insertBefore(List L, int data) {
   if (L->length > 0 && L->cursor != NULL && L->index != -1) {
 
     Node temp = L->front;
@@ -222,7 +223,7 @@ void insertBefore(List L, long data) {
   }
 }
 
-void insertAfter(List L, long data) {
+void insertAfter(List L, int data) {
   if (L->length > 0 && L->cursor != NULL && L->index != -1) {
     Node temp = L->front;
     while (temp != L->cursor) {
@@ -308,16 +309,20 @@ List copyList(List L) {
 }
 
 void printList(FILE *out, List L) {
+  if (L == NULL) {
+    printf("ERROR on printlist");
+    exit(1);
+  }
   Node n = NULL;
   char array[length(L)];
-
   for (n = L->front; n != NULL; n = n->next) {
-    sprintf(array, "%ld ", n->data);
+    sprintf(array, "%d ", n->data);
     fputs(array, out);
   }
+  freeNode(&n);
 }
 
-void set(List L, long x) {
+void set(List L, int x) {
   if (L->length > 0 && L->index >= 0) {
 
     L->cursor->data = x;
