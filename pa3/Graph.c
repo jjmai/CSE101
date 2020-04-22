@@ -31,7 +31,7 @@ void freeGraph(Graph *pG) {
   }
 }
 
-nt getOrder(Graph G) {
+int getOrder(Graph G) {
   if (G == NULL) {
     printf("ERROR on getSize");
     exit(1);
@@ -80,12 +80,14 @@ void getPath(List L, Graph G, int u) {
     exit(1);
   }
   if (getSource(G) == u) {
-    prepend(L, u);
+    append(L, u);
   } else if (G->parent[u] == NIL) {
-    printf("The distance from %d to %d is infinity", getSource(G), u);
+    // clear(L);
+    append(L, NIL);
+    // fprintf("The distance from %d to %d is infinity\n", getSource(G), u);
   } else {
     getPath(L, G, getParent(G, u));
-    prepend(L, u);
+    append(L, u);
   }
 }
 
@@ -96,15 +98,15 @@ void addEdge(Graph G, int u, int v) {
   }
   if (length(G->list[u]) == -1) {
     G->list[u] = newList();
-    prepend(G->list[u], v);
+    append(G->list[u], v);
   } else {
-    prepend(G->list[u], v);
+    append(G->list[u], v);
   }
   if (length(G->list[v]) == -1) {
     G->list[v] = newList();
-    prepend(G->list[v], u);
+    append(G->list[v], u);
   } else {
-    prepend(G->list[v], u);
+    append(G->list[v], u);
   }
   G->order++;
 }
@@ -124,6 +126,10 @@ void addArc(Graph G, int u, int v) {
 }
 
 void BFS(Graph G, int s) {
+  if (length(G->list[s]) == EMPTY) {
+    printf("ERROR, %d doesn't exist", s);
+    exit(1);
+  }
   for (int i = 0; i <= getSize(G); i++) {
     if (length(G->list[i]) > 0) {
       G->color[i] = 'w';
@@ -159,9 +165,9 @@ void BFS(Graph G, int s) {
 void printGraph(FILE *out, Graph G) {
   for (int i = 1; i <= G->size; i++) {
     if (length(G->list[i]) > 0) {
-      printf("%d: ", i);
+      fprintf(out, "%d: ", i);
       printList(out, G->list[i]);
-      printf("\n");
+      fprintf(out, "\n");
     }
   }
 }

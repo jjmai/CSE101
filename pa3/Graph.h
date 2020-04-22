@@ -5,7 +5,7 @@
 #ifndef NIL
 #define NIL 0
 #endif
-#define INF -1;
+#define INF -1
 
 typedef struct GraphObj *Graph;
 
