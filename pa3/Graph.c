@@ -28,7 +28,7 @@ Graph newGraph(int n) {
 
 void freeGraph(Graph *pG) {
   if (pG != NIL && *pG != NIL) {
-    for (int i = 0; i < getSize(*pG); i++) {
+    for (int i = 0; i <= (*pG)->length; i++) {
       if (length((*pG)->list[i]) > 0) {
         freeList(&(*pG)->list[i]);
       }
@@ -125,7 +125,7 @@ void addEdge(Graph G, int u, int v) {
   if (length(G->list[u]) == -1) {
     G->list[u] = newList();
     append(G->list[u], v);
-    G->size++;
+    //G->size++;
   } else {
     moveFront(G->list[u]);
     while (v > get(G->list[u]) && get(G->list[u]) != EMPTY) {
@@ -140,7 +140,7 @@ void addEdge(Graph G, int u, int v) {
   if (length(G->list[v]) == -1) {
     G->list[v] = newList();
     append(G->list[v], u);
-    G->size++;
+   // G->size++;
   } else {
     moveFront(G->list[v]);
     while (u > get(G->list[v]) && get(G->list[v]) != EMPTY) {
@@ -151,9 +151,9 @@ void addEdge(Graph G, int u, int v) {
     } else {
       insertBefore(G->list[v], u);
     }
-   G->order++;
+    G->order++;
   }
- // G->size++;
+   G->size++;
 }
 
 void addArc(Graph G, int u, int v) {
@@ -164,7 +164,7 @@ void addArc(Graph G, int u, int v) {
   if (length(G->list[u]) == -1) {
     G->list[u] = newList();
     prepend(G->list[u], v);
-    G->size++;
+  //  G->size++;
   } else {
     moveFront(G->list[u]);
     while (v > get(G->list[u]) && get(G->list[u]) != EMPTY) {
@@ -175,9 +175,9 @@ void addArc(Graph G, int u, int v) {
     } else {
       insertBefore(G->list[u], v);
     }
-   G->order++;
+    G->order++;
   }
- // G->size++;
+   G->size++;
 }
 
 void BFS(Graph G, int s) {
@@ -185,13 +185,11 @@ void BFS(Graph G, int s) {
     printf("ERROR on BFS");
     exit(1);
   }
-  
-  for (int i = 0; i <= getSize(G); i++) {
-    if (length(G->list[i]) > 0) {
-      G->color[i] = 'w';
-      G->distance[i] = INF;
-      G->parent[i] = NIL;
-    }
+
+  for (int i = 0; i <= G->length; i++) {
+    G->color[i] = 'w';
+    G->distance[i] = INF;
+    G->parent[i] = NIL;
   }
   G->parent[s] = NIL;
   G->color[s] = 'g';
