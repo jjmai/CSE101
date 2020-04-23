@@ -10,22 +10,22 @@ typedef struct GraphObj {
   int order;
   int size;
   int source;
+  int length;
 } GraphObj;
 
 Graph newGraph(int n) {
   Graph g = malloc(sizeof(GraphObj));
-  // linked list for neighbors
   g->list = calloc(n + 1, sizeof(List));
-  // b,w,g
   g->color = calloc(n + 1, sizeof(GraphObj));
   g->distance = calloc(n + 1, sizeof(GraphObj));
-  // contain predecessor
   g->parent = calloc(n + 1, sizeof(GraphObj));
   g->source = 0;
   g->size = 0;
   g->order = 0;
+  g->length=n;
   return g;
 }
+
 void freeGraph(Graph *pG) {
   if (pG != NIL && *pG != NIL) {
     for (int i = 0; i < getSize(*pG); i++) {
@@ -89,15 +89,12 @@ void getPath(List L, Graph G, int u) {
   if (getSource(G) == u) {
     append(L, u);
   } else if (G->parent[u] == NIL) {
-    // clear(L);
     append(L, NIL);
-    // fprintf("The distance from %d to %d is infinity\n", getSource(G), u);
   } else {
     getPath(L, G, getParent(G, u));
     append(L, u);
   }
 }
-
 void makeNull(Graph G) {
   if (G == NULL) {
     printf("ERROR on makeNULL");
@@ -139,7 +136,6 @@ void addEdge(Graph G, int u, int v) {
     } else {
       insertBefore(G->list[u], v);
     }
-    // append(G->list[u], v);
   }
   if (length(G->list[v]) == -1) {
     G->list[v] = newList();
@@ -155,7 +151,6 @@ void addEdge(Graph G, int u, int v) {
     } else {
       insertBefore(G->list[v], u);
     }
-    // append(G->list[v], u);
   }
   G->order++;
 }
@@ -179,50 +174,51 @@ void addArc(Graph G, int u, int v) {
     } else {
       insertBefore(G->list[u], v);
     }
-    // prepend(G->list[u], v);
   }
   G->order++;
 }
 
 void BFS(Graph G, int s) {
-  if (s > getSize(G)) {
-    printf("ERROR, %d doesn't exist", s);
+  if (G == NULL) {
+    printf("ERROR on BFS");
     exit(1);
   }
-  for (int i = 0; i <= getSize(G); i++) {
-    if (length(G->list[i]) > 0) {
-      G->color[i] = 'w';
-      G->distance[i] = INF;
-      G->parent[i] = NIL;
-    }
-  }
-  G->parent[s] = NIL;
-  G->color[s] = 'g';
-  G->distance[s] = 0;
-  G->source = s;
-
-  List l = newList();
-  prepend(l, s);
-  while (length(l) > 0) {
-    int num = front(l);
-    deleteFront(l);
-    moveFront(G->list[num]);
-    while (get(G->list[num]) != EMPTY) {
-      if (G->color[get(G->list[num])] == 'w') {
-        G->color[get(G->list[num])] = 'g';
-        G->distance[get(G->list[num])] = G->distance[num] + 1;
-        G->parent[get(G->list[num])] = num;
-        append(l, get(G->list[num]));
+  if (G->list[s] != NULL) {
+    for (int i = 0; i <= getSize(G); i++) {
+      if (length(G->list[i]) > 0) {
+        G->color[i] = 'w';
+        G->distance[i] = INF;
+        G->parent[i] = NIL;
       }
-      moveNext(G->list[num]);
     }
-    G->color[num] = 'b';
+    G->parent[s] = NIL;
+    G->color[s] = 'g';
+    G->distance[s] = 0;
+    G->source = s;
+
+    List l = newList();
+    prepend(l, s);
+    while (length(l) > 0) {
+      int num = front(l);
+      deleteFront(l);
+      moveFront(G->list[num]);
+      while (get(G->list[num]) != EMPTY) {
+        if (G->color[get(G->list[num])] == 'w') {
+          G->color[get(G->list[num])] = 'g';
+          G->distance[get(G->list[num])] = G->distance[num] + 1;
+          G->parent[get(G->list[num])] = num;
+          append(l, get(G->list[num]));
+        }
+        moveNext(G->list[num]);
+      }
+      G->color[num] = 'b';
+    }
+    freeList(&l);
   }
-  freeList(&l);
 }
 
 void printGraph(FILE *out, Graph G) {
-  for (int i = 1; i <= G->size; i++) {
+  for (int i = 1; i <= G->length; i++) {
     if (length(G->list[i]) > 0) {
       fprintf(out, "%d: ", i);
       printList(out, G->list[i]);
