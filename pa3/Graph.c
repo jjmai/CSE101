@@ -21,8 +21,8 @@ Graph newGraph(int n) {
   g->parent = calloc(n + 1, sizeof(GraphObj));
   g->source = 0;
   g->size = 0;
-  g->order = 0;
-  g->length = n;
+  g->order = n;
+ // g->length = n;
   return g;
 }
 
@@ -106,7 +106,7 @@ void makeNull(Graph G) {
   G->source = 0;
   G->size = 0;
   G->order = 0;
-  for (int i = 0; i <= G->length; i++) {
+  for (int i = 0; i <= getOrder(G); i++) {
     if (length(G->list[i]) > 0) {
       G->color[i] = '\0';
       G->distance[i] = '\0';
@@ -154,7 +154,7 @@ void addEdge(Graph G, int u, int v) {
     } else {
       insertBefore(G->list[v], u);
     }
-    G->order++;
+    //G->order++;
   }
   G->size++;
 }
@@ -178,7 +178,7 @@ void addArc(Graph G, int u, int v) {
     } else {
       insertBefore(G->list[u], v);
     }
-    G->order++;
+ //   G->order++;
   }
   G->size++;
 }
@@ -188,7 +188,7 @@ void BFS(Graph G, int s) {
     printf("ERROR on BFS");
     exit(1);
   }
-  for (int i = 0; i <= G->length; i++) {
+  for (int i = 0; i <= getOrder(G); i++) {
     G->color[i] = 'w';
     G->distance[i] = INF;
     G->parent[i] = NIL;
@@ -222,7 +222,7 @@ void BFS(Graph G, int s) {
 }
 
 void printGraph(FILE *out, Graph G) {
-  for (int i = 1; i <= G->length; i++) {
+  for (int i = 1; i <= getOrder(G); i++) {
     fprintf(out, "%d: ", i);
     if (length(G->list[i]) > 0) {
       printList(out, G->list[i]);
