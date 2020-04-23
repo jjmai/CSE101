@@ -22,7 +22,7 @@ Graph newGraph(int n) {
   g->source = 0;
   g->size = 0;
   g->order = 0;
-  g->length=n;
+  g->length = n;
   return g;
 }
 
@@ -103,7 +103,7 @@ void makeNull(Graph G) {
   G->source = 0;
   G->size = 0;
   G->order = 0;
-  for (int i = 0; i <= G->size; i++) {
+  for (int i = 0; i <= G->length; i++) {
     if (length(G->list[i]) > 0) {
       G->color[i] = '\0';
       G->distance[i] = '\0';
@@ -151,8 +151,9 @@ void addEdge(Graph G, int u, int v) {
     } else {
       insertBefore(G->list[v], u);
     }
+   G->order++;
   }
-  G->order++;
+ // G->size++;
 }
 
 void addArc(Graph G, int u, int v) {
@@ -174,8 +175,9 @@ void addArc(Graph G, int u, int v) {
     } else {
       insertBefore(G->list[u], v);
     }
+   G->order++;
   }
-  G->order++;
+ // G->size++;
 }
 
 void BFS(Graph G, int s) {
@@ -183,38 +185,40 @@ void BFS(Graph G, int s) {
     printf("ERROR on BFS");
     exit(1);
   }
-  if (G->list[s] != NULL) {
-    for (int i = 0; i <= getSize(G); i++) {
-      if (length(G->list[i]) > 0) {
-        G->color[i] = 'w';
-        G->distance[i] = INF;
-        G->parent[i] = NIL;
-      }
+  
+  for (int i = 0; i <= getSize(G); i++) {
+    if (length(G->list[i]) > 0) {
+      G->color[i] = 'w';
+      G->distance[i] = INF;
+      G->parent[i] = NIL;
     }
-    G->parent[s] = NIL;
-    G->color[s] = 'g';
-    G->distance[s] = 0;
-    G->source = s;
-
-    List l = newList();
-    prepend(l, s);
-    while (length(l) > 0) {
-      int num = front(l);
-      deleteFront(l);
-      moveFront(G->list[num]);
-      while (get(G->list[num]) != EMPTY) {
-        if (G->color[get(G->list[num])] == 'w') {
-          G->color[get(G->list[num])] = 'g';
-          G->distance[get(G->list[num])] = G->distance[num] + 1;
-          G->parent[get(G->list[num])] = num;
-          append(l, get(G->list[num]));
-        }
-        moveNext(G->list[num]);
-      }
-      G->color[num] = 'b';
-    }
-    freeList(&l);
   }
+  G->parent[s] = NIL;
+  G->color[s] = 'g';
+  G->distance[s] = 0;
+  G->source = s;
+
+  List l = newList();
+  prepend(l, s);
+  while (length(l) > 0) {
+    int num = front(l);
+    deleteFront(l);
+    moveFront(G->list[num]);
+    if (G->list[s] == NULL) {
+      break;
+    }
+    while (get(G->list[num]) != EMPTY) {
+      if (G->color[get(G->list[num])] == 'w') {
+        G->color[get(G->list[num])] = 'g';
+        G->distance[get(G->list[num])] = G->distance[num] + 1;
+        G->parent[get(G->list[num])] = num;
+        append(l, get(G->list[num]));
+      }
+      moveNext(G->list[num]);
+    }
+    G->color[num] = 'b';
+  }
+  freeList(&l);
 }
 
 void printGraph(FILE *out, Graph G) {
