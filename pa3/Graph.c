@@ -22,7 +22,7 @@ Graph newGraph(int n) {
   // contain predecessor
   g->parent = calloc(n + 1, sizeof(GraphObj));
   g->source = 0;
-  g->size = n;
+  g->size = 0;
   g->order = 0;
   return g;
 }
@@ -128,14 +128,34 @@ void addEdge(Graph G, int u, int v) {
   if (length(G->list[u]) == -1) {
     G->list[u] = newList();
     append(G->list[u], v);
+    G->size++;
   } else {
-    append(G->list[u], v);
+    moveFront(G->list[u]);
+    while (v > get(G->list[u]) && get(G->list[u]) != EMPTY) {
+      moveNext(G->list[u]);
+    }
+    if (index(G->list[u]) == EMPTY) {
+      append(G->list[u], v);
+    } else {
+      insertBefore(G->list[u], v);
+    }
+    // append(G->list[u], v);
   }
   if (length(G->list[v]) == -1) {
     G->list[v] = newList();
     append(G->list[v], u);
+    G->size++;
   } else {
-    append(G->list[v], u);
+    moveFront(G->list[v]);
+    while (u > get(G->list[v]) && get(G->list[v]) != EMPTY) {
+      moveNext(G->list[v]);
+    }
+    if (index(G->list[v]) == EMPTY) {
+      append(G->list[v], u);
+    } else {
+      insertBefore(G->list[v], u);
+    }
+    // append(G->list[v], u);
   }
   G->order++;
 }
@@ -148,14 +168,24 @@ void addArc(Graph G, int u, int v) {
   if (length(G->list[u]) == -1) {
     G->list[u] = newList();
     prepend(G->list[u], v);
+    G->size++;
   } else {
-    prepend(G->list[u], v);
+    moveFront(G->list[u]);
+    while (v > get(G->list[u]) && get(G->list[u]) != EMPTY) {
+      moveNext(G->list[u]);
+    }
+    if (index(G->list[u]) == EMPTY) {
+      append(G->list[u], v);
+    } else {
+      insertBefore(G->list[u], v);
+    }
+    // prepend(G->list[u], v);
   }
   G->order++;
 }
 
 void BFS(Graph G, int s) {
-  if (length(G->list[s]) == EMPTY) {
+  if (s > getSize(G)) {
     printf("ERROR, %d doesn't exist", s);
     exit(1);
   }

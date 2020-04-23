@@ -28,7 +28,7 @@ int main(int argc, char *argv[]) {
     addEdge(g, num1, num2);
   }
   printGraph(outfile, g);
-
+  fprintf(outfile, "\n");
   while (fscanf(infile, "%d %d", &num1, &num2) != EOF) {
     if (num1 == 0 && num2 == 0) {
       break;
@@ -43,7 +43,7 @@ int main(int argc, char *argv[]) {
       fprintf(outfile, "The distance from %d to %d is infinity\n", num1, num2);
     }
     if (getDist(g, num2) != INF) {
-      fprintf(outfile, "The shortest %d-%d path is: ", num1, num2);
+      fprintf(outfile, "A shortest %d-%d path is: ", num1, num2);
       printList(outfile, l);
       fprintf(outfile, "\n");
     } else {
