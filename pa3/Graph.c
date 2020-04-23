@@ -78,7 +78,10 @@ int getDist(Graph G, int u) {
     printf("ERROR on getDist");
     exit(1);
   }
-  return G->distance[u];
+  if(getSource(G)!=NIL) {
+    return G->distance[u];
+  }
+  return INF;
 }
 
 void getPath(List L, Graph G, int u) {
@@ -125,7 +128,7 @@ void addEdge(Graph G, int u, int v) {
   if (length(G->list[u]) == -1) {
     G->list[u] = newList();
     append(G->list[u], v);
-    //G->size++;
+    // G->size++;
   } else {
     moveFront(G->list[u]);
     while (v > get(G->list[u]) && get(G->list[u]) != EMPTY) {
@@ -140,7 +143,7 @@ void addEdge(Graph G, int u, int v) {
   if (length(G->list[v]) == -1) {
     G->list[v] = newList();
     append(G->list[v], u);
-   // G->size++;
+    // G->size++;
   } else {
     moveFront(G->list[v]);
     while (u > get(G->list[v]) && get(G->list[v]) != EMPTY) {
@@ -153,7 +156,7 @@ void addEdge(Graph G, int u, int v) {
     }
     G->order++;
   }
-   G->size++;
+  G->size++;
 }
 
 void addArc(Graph G, int u, int v) {
@@ -164,7 +167,7 @@ void addArc(Graph G, int u, int v) {
   if (length(G->list[u]) == -1) {
     G->list[u] = newList();
     prepend(G->list[u], v);
-  //  G->size++;
+    //  G->size++;
   } else {
     moveFront(G->list[u]);
     while (v > get(G->list[u]) && get(G->list[u]) != EMPTY) {
@@ -177,7 +180,7 @@ void addArc(Graph G, int u, int v) {
     }
     G->order++;
   }
-   G->size++;
+  G->size++;
 }
 
 void BFS(Graph G, int s) {
@@ -185,7 +188,6 @@ void BFS(Graph G, int s) {
     printf("ERROR on BFS");
     exit(1);
   }
-
   for (int i = 0; i <= G->length; i++) {
     G->color[i] = 'w';
     G->distance[i] = INF;
