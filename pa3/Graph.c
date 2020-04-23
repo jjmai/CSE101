@@ -219,10 +219,10 @@ void BFS(Graph G, int s) {
 
 void printGraph(FILE *out, Graph G) {
   for (int i = 1; i <= G->length; i++) {
+    fprintf(out, "%d: ", i);
     if (length(G->list[i]) > 0) {
-      fprintf(out, "%d: ", i);
       printList(out, G->list[i]);
-      fprintf(out, "\n");
     }
+    fprintf(out, "\n");
   }
 }
