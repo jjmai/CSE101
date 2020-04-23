@@ -10,7 +10,7 @@ typedef struct GraphObj {
   int order;
   int size;
   int source;
-  int length;
+  //int length;
 } GraphObj;
 
 Graph newGraph(int n) {
@@ -28,7 +28,7 @@ Graph newGraph(int n) {
 
 void freeGraph(Graph *pG) {
   if (pG != NIL && *pG != NIL) {
-    for (int i = 0; i <= (*pG)->length; i++) {
+    for (int i = 0; i <= getOrder(*pG); i++) {
       if (length((*pG)->list[i]) > 0) {
         freeList(&(*pG)->list[i]);
       }
