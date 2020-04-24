@@ -1,3 +1,10 @@
+/*********************************************
+ * * Jordan Mai, jmai12
+ * * 2020 Spring CSE101,PA3
+ * * Graph.h
+ * * Header File for Graph.c
+ *********************************************/
+
 #include "List.h"
 #ifndef _GRAPH_H
 #define _GRAPH_H

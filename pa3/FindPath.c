@@ -1,3 +1,10 @@
+/******************************
+ * * Jordan Mai, jmai12
+ * * 2020 Spring CES101 PA3
+ * * FindPath.c
+ * * Program to store paths in Graph ADT and find shortest path
+ * *******************************/
+
 #include "Graph.h"
 #include "List.h"
 #include <stdio.h>
@@ -18,9 +25,11 @@ int main(int argc, char *argv[]) {
   outfile = fopen(argv[2], "w");
 
   int size = 0;
+  // read in first line of size
   fscanf(infile, "%d", &size);
   int num1 = 0, num2 = 0;
   Graph g = newGraph(size);
+  // read two pairs until  0 0
   while (fscanf(infile, "%d %d", &num1, &num2) != EOF) {
     if (num1 == 0 && num2 == 0) {
       break;
@@ -29,6 +38,7 @@ int main(int argc, char *argv[]) {
   }
   printGraph(outfile, g);
   fprintf(outfile, "\n");
+  // read in second part to find path until 0 0
   while (fscanf(infile, "%d %d", &num1, &num2) != EOF) {
     if (num1 == 0 && num2 == 0) {
       break;

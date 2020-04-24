@@ -5,24 +5,24 @@
  * * Graph ADT
  ***************************/
 
-
 #include "Graph.h"
 #include "List.h"
+#include <assert.h>
 #define EMPTY -1
 
 typedef struct GraphObj {
-  List *list;
-  int *color;
-  int *distance;
-  int *parent;
-  int order;
-  int size;
-  int source;
-  //int length;
+  List *list;    // array of List
+  int *color;    // b , g , w
+  int *distance; // array of distance from source
+  int *parent;   // array of predecessors
+  int order;     // max possible number nodes
+  int size;      // graph edges
+  int source;    // cursor of graph
 } GraphObj;
 
 Graph newGraph(int n) {
   Graph g = malloc(sizeof(GraphObj));
+  assert(g);
   g->list = calloc(n + 1, sizeof(List));
   g->color = calloc(n + 1, sizeof(GraphObj));
   g->distance = calloc(n + 1, sizeof(GraphObj));
@@ -30,7 +30,6 @@ Graph newGraph(int n) {
   g->source = 0;
   g->size = 0;
   g->order = n;
- // g->length = n;
   return g;
 }
 
@@ -90,12 +89,13 @@ int getDist(Graph G, int u) {
     printf("ERROR on getDist");
     exit(1);
   }
-  if(getSource(G)!=NIL) {
+  if (getSource(G) != NIL) {
     return G->distance[u];
   }
   return INF;
 }
 
+// appends to a list of the shortest path
 void getPath(List L, Graph G, int u) {
   if (getSource(G) == NIL) {
     printf("ERROR on getPath() .no source found");
@@ -110,6 +110,7 @@ void getPath(List L, Graph G, int u) {
     append(L, u);
   }
 }
+// set to new
 void makeNull(Graph G) {
   if (G == NULL) {
     printf("ERROR on makeNULL");
@@ -137,11 +138,12 @@ void addEdge(Graph G, int u, int v) {
     printf("ERROR on addEDGE()");
     exit(1);
   }
+  // if first index, then create a list at index
   if (length(G->list[u]) == -1) {
     G->list[u] = newList();
     append(G->list[u], v);
-    // G->size++;
   } else {
+    // compares and sorts in increasing order
     moveFront(G->list[u]);
     while (v > get(G->list[u]) && get(G->list[u]) != EMPTY) {
       moveNext(G->list[u]);
@@ -152,10 +154,10 @@ void addEdge(Graph G, int u, int v) {
       insertBefore(G->list[u], v);
     }
   }
+  // other side
   if (length(G->list[v]) == -1) {
     G->list[v] = newList();
     append(G->list[v], u);
-    // G->size++;
   } else {
     moveFront(G->list[v]);
     while (u > get(G->list[v]) && get(G->list[v]) != EMPTY) {
@@ -166,7 +168,6 @@ void addEdge(Graph G, int u, int v) {
     } else {
       insertBefore(G->list[v], u);
     }
-    //G->order++;
   }
   G->size++;
 }
@@ -179,7 +180,6 @@ void addArc(Graph G, int u, int v) {
   if (length(G->list[u]) == -1) {
     G->list[u] = newList();
     prepend(G->list[u], v);
-    //  G->size++;
   } else {
     moveFront(G->list[u]);
     while (v > get(G->list[u]) && get(G->list[u]) != EMPTY) {
@@ -190,7 +190,6 @@ void addArc(Graph G, int u, int v) {
     } else {
       insertBefore(G->list[u], v);
     }
- //   G->order++;
   }
   G->size++;
 }
@@ -200,6 +199,7 @@ void BFS(Graph G, int s) {
     printf("ERROR on BFS");
     exit(1);
   }
+  // set all parameters of Graph to respective value
   for (int i = 0; i <= getOrder(G); i++) {
     G->color[i] = 'w';
     G->distance[i] = INF;
@@ -209,13 +209,14 @@ void BFS(Graph G, int s) {
   G->color[s] = 'g';
   G->distance[s] = 0;
   G->source = s;
-
+  // the queue for storing order
   List l = newList();
   prepend(l, s);
   while (length(l) > 0) {
     int num = front(l);
     deleteFront(l);
     moveFront(G->list[num]);
+    // exit loop if index doesnt exist
     if (G->list[s] == NULL) {
       break;
     }
@@ -233,6 +234,7 @@ void BFS(Graph G, int s) {
   freeList(&l);
 }
 
+// print all the values in graph
 void printGraph(FILE *out, Graph G) {
   for (int i = 1; i <= getOrder(G); i++) {
     fprintf(out, "%d: ", i);

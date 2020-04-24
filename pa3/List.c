@@ -1,10 +1,17 @@
+/**************************
+ * * Jordan Mai,jmai12
+ * * 2020 Spring CSE101 PA1
+ * * List.c
+ * * List ADT
+ ***************************/
+
 #include "List.h"
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-    typedef struct NodeObj {
+typedef struct NodeObj {
   int data;
   struct NodeObj *next;
   struct NodeObj *prev;
@@ -109,7 +116,7 @@ int get(List L) {
   }
 }
 
-int l_equals(List A, List B) {
+int equals(List A, List B) {
   if (length(A) != length(B)) {
     return 0;
   }
