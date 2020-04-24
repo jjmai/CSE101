@@ -1,7 +1,7 @@
 #------------------------------------------
-Jordan Mai, jmai12
-CSE101 Spring, PA2
-README.md
+# Jordan Mai, jmai12
+# CSE101 Spring, PA2
+# README.md
 #-------------------------------------------
 
 #Program
