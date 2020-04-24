@@ -1,3 +1,11 @@
+/**************************
+ * * Jordan Mai,jmai12
+ * * 2020 Spring CSE101 PA3
+ * * Graph.c
+ * * Graph ADT
+ ***************************/
+
+
 #include "Graph.h"
 #include "List.h"
 #define EMPTY -1
@@ -33,6 +41,10 @@ void freeGraph(Graph *pG) {
         freeList(&(*pG)->list[i]);
       }
     }
+    free((*pG)->list);
+    free((*pG)->color);
+    free((*pG)->distance);
+    free((*pG)->parent);
     free(*pG);
     *pG = NULL;
   }
