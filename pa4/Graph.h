@@ -44,5 +44,4 @@ void printGraph(FILE *out, Graph G);
 Graph transpose(Graph G);
 Graph copyGraph(Graph G);
 
-
 #endif
