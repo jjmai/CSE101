@@ -52,24 +52,23 @@ int main(int argc, char *argv[]) {
   }
   fprintf(outfile, "G contains %d strongly connected components:\n", count);
   int num = 1;
-  // go through list to find lowest number of null parent
-  for (int i = 1; i <= getOrder(ggg); i++) {
-    moveFront(l);
-    if (getParent(ggg, i) == NIL) {
-      // iterate until i
-      while (get(l) != i && get(l) != -1) {
-        moveNext(l);
-      }
+
+  List ll = newList();
+  while (length(l) > 0) {
+    moveBack(l);
+    while (getParent(ggg, get(l)) != NIL) {
+      prepend(ll, get(l));
+      delete (l);
+      moveBack(l);
+    }
+    if (getParent(ggg, get(l)) == NIL) {
       fprintf(outfile, "Component %d: ", num);
       num++;
-      fprintf(outfile, "%d ", get(l));
-      moveNext(l);
-      // print until next NIL parent
-      while (getParent(ggg, get(l)) != NIL && get(l) != -1) {
-        fprintf(outfile, "%d ", get(l));
-        moveNext(l);
-      }
-      fprintf(outfile, "\n");
+      prepend(ll, get(l));
+      delete (l);
+      printList(outfile, ll);
+      fprintf(outfile,"\n");
+      clear(ll);
     }
   }
   fclose(infile);
@@ -78,4 +77,5 @@ int main(int argc, char *argv[]) {
   freeGraph(&gg);
   freeGraph(&ggg);
   freeList(&l);
+  freeList(&ll);
 }
