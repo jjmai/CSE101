@@ -20,6 +20,7 @@ int main(int argc, char *argv[]) {
   fscanf(infile, "%d", &size);
   int num1 = 0, num2 = 0;
   Graph g = newGraph(size);
+  // read pairs until 0 0
   while (fscanf(infile, "%d %d", &num1, &num2) != EOF) {
     if (num1 == 0 && num2 == 0) {
       break;
@@ -31,6 +32,7 @@ int main(int argc, char *argv[]) {
   fprintf(outfile, "\n");
 
   List l = newList();
+  // append order number to list
   for (int i = 1; i <= getOrder(g); i++) {
     append(l, i);
   }
@@ -41,6 +43,7 @@ int main(int argc, char *argv[]) {
   DFS(ggg, l);
   int count = 0;
   moveFront(l);
+  // count how many SCC
   while (get(l) != -1) {
     if (getParent(ggg, get(l)) == NIL) {
       count += 1;
@@ -49,9 +52,11 @@ int main(int argc, char *argv[]) {
   }
   fprintf(outfile, "G contains %d strongly connected components:\n", count);
   int num = 1;
-  for (int i = 1; i<= getOrder(ggg); i++) {
+  // go through list to find lowest number of null parent
+  for (int i = 1; i <= getOrder(ggg); i++) {
     moveFront(l);
     if (getParent(ggg, i) == NIL) {
+      // iterate until i
       while (get(l) != i && get(l) != -1) {
         moveNext(l);
       }
@@ -59,6 +64,7 @@ int main(int argc, char *argv[]) {
       num++;
       fprintf(outfile, "%d ", get(l));
       moveNext(l);
+      // print until next NIL parent
       while (getParent(ggg, get(l)) != NIL && get(l) != -1) {
         fprintf(outfile, "%d ", get(l));
         moveNext(l);
@@ -66,4 +72,10 @@ int main(int argc, char *argv[]) {
       fprintf(outfile, "\n");
     }
   }
+  fclose(infile);
+  fclose(outfile);
+  freeGraph(&g);
+  freeGraph(&gg);
+  freeGraph(&ggg);
+  freeList(&l);
 }

@@ -4,12 +4,11 @@
  * * Graph.c
  * * Graph ADT
  ****************************/
-
 #include "Graph.h"
 #include "List.h"
 #include <assert.h>
 #define EMPTY -1
-void visit(Graph G, int u, int *time);
+void visit(Graph G, int u, int *time, List S);
 
 typedef struct GraphObj {
   List *list;    // array of List
@@ -19,8 +18,8 @@ typedef struct GraphObj {
   int order;     // max possible number nodes
   int size;      // graph edges
   int source;    // cursor of graph
-  int *discover;
-  int *finish;
+  int *discover; // array of discoer time
+  int *finish;   // array of finish time
 } GraphObj;
 
 Graph newGraph(int n) {
@@ -235,21 +234,25 @@ void BFS(Graph G, int s) {
   }
   freeList(&l);
 }
-
+// return discover time
 int getDiscover(Graph G, int u) {
   if (G == NULL) {
     printf("ERROR on getDiscover()");
     exit(1);
   }
-  return G->discover[u];
+  if (1 < = u && u <= getOrder(G)) {
+    return G->discover[u];
+  }
 }
-
+// return finish time
 int getFinish(Graph G, int u) {
   if (G == NULL) {
     printf("ERROR on getFinish");
     exit(1);
   }
-  return G->finish[u];
+  if (1 <= u && u <= getOrder(G)) {
+    return G->finish[u];
+  }
 }
 
 void DFS(Graph G, List S) {
@@ -265,7 +268,7 @@ void DFS(Graph G, List S) {
     G->color[i] = 'w';
     G->parent[i] = NIL;
   }
-  int time = 0, counter = 0;
+  int time = 0;
   moveFront(S);
   while (get(S) != EMPTY) {
     if (G->color[get(S)] == 'w') {
@@ -297,6 +300,7 @@ void visit(Graph G, int u, int *time, List S) {
   G->color[u] = 'b';
   *time = *time + 1;
   G->finish[u] = *time;
+  // add to stack when finish
   prepend(S, u);
 }
 void printGraph(FILE *out, Graph G) {
