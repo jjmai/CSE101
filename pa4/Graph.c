@@ -241,10 +241,13 @@ int getDiscover(Graph G, int u) {
     exit(1);
   }
   if (1 <= u && u <= getOrder(G)) {
-    return G->discover[u];
+    if (G->discover[u] == 0) {
+      return UNDEF;
+    } else {
+      return G->discover[u];
+    }
   }
-  printf("ERROR getDistance()");
-  exit(1);
+  return UNDEF;
 }
 // return finish time
 int getFinish(Graph G, int u) {
@@ -253,10 +256,13 @@ int getFinish(Graph G, int u) {
     exit(1);
   }
   if (1 <= u && u <= getOrder(G)) {
-    return G->finish[u];
+    if (G->finish[u] == 0) {
+      return UNDEF;
+    } else {
+      return G->finish[u];
+    }
   }
-  printf("ERROR getFInish()");
-  exit(1);
+  return UNDEF;
 }
 
 void DFS(Graph G, List S) {
