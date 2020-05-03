@@ -1,8 +1,8 @@
 /**************************
- * * Jordan Mai,jmai12
- * * 2020 Spring CSE101 PA3
- * * Graph.c
- * * Graph ADT
+ * Jordan Mai,jmai12
+ * 2020 Spring CSE101 PA4
+ * Graph.c
+ * Graph ADT
  ****************************/
 #include "Graph.h"
 #include "List.h"

@@ -1,9 +1,9 @@
 /*********************************************
- * * Jordan Mai, jmai12
- * * 2020 Spring CSE101,PA4
- * * Graph.h
- * * Header File for Graph.c
- * *********************************************/
+ * Jordan Mai, jmai12
+ * 2020 Spring CSE101,PA4
+ * Graph.h
+ * Header File for Graph.c
+ **********************************************/
 
 #include "List.h"
 #ifndef _GRAPH_H
@@ -13,6 +13,7 @@
 #define NIL 0
 #endif
 #define INF -1
+#define UNDEF -2
 
 typedef struct GraphObj *Graph;
 

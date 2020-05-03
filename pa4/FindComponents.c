@@ -1,3 +1,10 @@
+/*********************************************************************
+ * Jordan Mai, jmai12
+ * 2020 Spring CES101 PA4
+ * FindComponents.c
+ * Program to store paths in Graph ADT and find strong connected components
+ **********************************************************************/
+
 #include "Graph.h"
 #include "List.h"
 #include <stdio.h>
@@ -52,7 +59,7 @@ int main(int argc, char *argv[]) {
   }
   fprintf(outfile, "G contains %d strongly connected components:\n", count);
   int num = 1;
-
+  //store in new list
   List ll = newList();
   while (length(l) > 0) {
     moveBack(l);
@@ -61,13 +68,14 @@ int main(int argc, char *argv[]) {
       delete (l);
       moveBack(l);
     }
+    //store until parent is NIL
     if (getParent(ggg, get(l)) == NIL) {
       fprintf(outfile, "Component %d: ", num);
       num++;
       prepend(ll, get(l));
       delete (l);
       printList(outfile, ll);
-      fprintf(outfile,"\n");
+      fprintf(outfile, "\n");
       clear(ll);
     }
   }

@@ -1,3 +1,10 @@
+/*************************************
+ * Jordan Mai, jmai12
+ * 2020 Spring CSE101 PA4
+ * GraphTest.c
+ * Test CLient
+ ************************************/ 
+
 #include "Graph.h"
 #include "List.h"
 #include <stdio.h>

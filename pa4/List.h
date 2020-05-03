@@ -1,8 +1,8 @@
 /****************************
- * * Jordan Mai, jmai12
- * * 2020 Spring CSE101,PA4
- * * List.h
- * * Header File for List
+ * Jordan Mai, jmai12
+ * 2020 Spring CSE101,PA4
+ * List.h
+ * Header File for List
  ******************************/
 #include <stdio.h>
 #include <stdlib.h>
@@ -11,20 +11,21 @@
 
 typedef struct ListObj *List;
 
- // Creates and returns a new empty List.
- List newList(void); 
+// Creates and returns a new empty List.
+List newList(void);
 // Frees all heap memory associated with *pL, and sets
 // *pL to NULL.
 void freeList(List *pL);
 
 // Returns the number of elements in L.
 int length(List L);
- // Returns index of cursor element if defined, -1 otherwise.
+// Returns index of cursor element if defined, -1 otherwise.
 int index(List L);
- // Returns front element of L. Pre: length()>0
+// Returns front element of L. Pre: length()>0
 int front(List L);
 // Returns back element of L. Pre: length()>0
 int back(List L);
+int get(List L);
 // Returns cursor element of L. Pre: length()>0, index()>=0
 int equals(List A, List B);
 
@@ -54,4 +55,3 @@ void set(List L, int x);
 // List concatList(List A, List B);
 
 #endif
-

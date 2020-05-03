@@ -1,9 +1,9 @@
 /**************************
- *  * Jordan Mai,jmai12
- *  * 2020 Spring CSE101 PA4
- *  * List.c
- *  * List ADT
- *  ***************************/
+ * Jordan Mai,jmai12
+ * 2020 Spring CSE101 PA4
+ * List.c
+ * List ADT
+ ****************************/
 
 #include "List.h"
 #include <assert.h>
@@ -335,4 +335,3 @@ void set(List L, int x) {
     L->cursor->data = x;
   }
 }
-
