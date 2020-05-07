@@ -1,5 +1,7 @@
 #include "Dictionary.h"
 #include <string.h>
+#include <stdlib.h>
+#include <stdbool.h>
 
 typedef struct NodeObj {
     char *key;
@@ -53,11 +55,17 @@ Dictionary newDictionary(int unique) {
 
 void freeDictionary(Dictionary* pD) {
     if(pD!=NULL && *pD !=NULL) {
-
+       
+        free(*pD);
+        *pD =NULL;
     }
 }
 
 int size(Dictionary D) {
+    if(D==NULL) {
+        printf("ERROR on size");
+        exit(1);
+    }
     return D->size;
 }
 
@@ -102,29 +110,57 @@ void insert(Dictionary D, KEY_TYPE k, VAL_TYPE v) {
         printf("ERROR on insert");
         exit(1);
     }
+    bool check=false;
+    if(getUnique(D)==1) {
+        check = true;
+    }
     if(getUnique(D)==0) {
-        Node A= D->root;
-        Node temp=NULL;
-        Node new =newNode(k,v);
-        while(A!=NULL) {
-            temp=A;
-            if(KEY_CMP(k, A->key)<0) {
-                A=A->left;
+        if(lookup(D,k)==VAL_UNDEF) {
+            Node A = D->root;
+            Node temp = NULL;
+            Node new = newNode(k, v);
+            while (A != NULL) {
+                temp = A;
+                if (KEY_CMP(k, A->key) < 0) {
+                    A = A->left;
+                } else if (KEY_CMP(k, A->key) > 0) {
+                    A = A->right;
+                }
+            }
+            new->parent = temp;
+            if (temp == NULL) {
+                D->root = new;
+            } else if (KEY_CMP(new->key, temp->key) < 0) {
+                temp->left = new;
             } else {
-                A=A->right;
+                temp->right = new;
+            }
+            D->size++;
+        }
+    }else if(getUnique(D)==1) {
+        Node A = D->root;
+        Node temp = NULL;
+        Node new = newNode(k, v);
+        while (A != NULL) {
+            temp = A;
+            if (KEY_CMP(k, A->key) < 0) {
+                A = A->left;
+            } else if (KEY_CMP(k, A->key) >= 0) {
+                A = A->right;
             }
         }
-        new->parent=temp;
-        if(temp==NULL) {
-            D->root=new;
-        }else if(KEY_CMP(new->key,temp->key)<0) {
-            temp->left=new;
+        new->parent = temp;
+        if (temp == NULL) {
+            D->root = new;
+        } else if (KEY_CMP(new->key, temp->key) < 0) {
+            temp->left = new;
         } else {
-            temp->right=new;
+            temp->right = new;
         }
         D->size++;
     }
 }
+
 
 void delete(Dictionary D, KEY_TYPE k) {
     if(D==NULL) {
@@ -133,6 +169,7 @@ void delete(Dictionary D, KEY_TYPE k) {
     }
     if(lookup(D,k)!=VAL_UNDEF) {
         Node A= D->root;
+        Node P=NULL;
         while(A!=NULL) {
             if(KEY_CMP(k,A->key)==0) {
                 break;
@@ -142,13 +179,69 @@ void delete(Dictionary D, KEY_TYPE k) {
                 A=A->right;
             }
         }
-        if(A->left==NULL) {
-            if(A->parent==NULL) {
-
-            }
+        if(D->cursor==A) {
+            D->cursor=NULL;
         }
+        if(A==NULL) {
+            printf("ERROR on delete");
+            exit(1);
+        }
+        if(A->left ==NULL && A->right ==NULL) {
+            if(A==D->root) {
+                D->root = NULL;
+                freeNode(&A);
+            } else {
+                P = A->parent;
+                if(P->right==A) {
+                    P->right=NULL;
+                } else {
+                    P->left=NULL;
+                }
+                freeNode(&A);
+            }
+        } else if(A->right==NULL) {
+            if(A==D->root) {
+                D->root = A->left;
+                freeNode(&A);
+            } else {
+                P = A->parent;
+                if(P->right==A) {
+                    P->right=A->left;
+                } else {
+                    P->left = A->left;
+                }
+                freeNode(&A);
+            }
+        } else if(A->left==NULL) {
+            if(A==D->root) {
+                D->root = A->right;
+                freeNode(&A);
+            } else {
+                P = A->parent;
+                if(P->right==A) {
+                    P->right = A->right;
+                } else {
+                    P->left = A->right;
+                }
+                freeNode(&A);
+            }
+        } else {
+            Node S=A->right;
+            while(S->left !=NULL) {
+                S=S->left;
+            }
+            A->key=S->key;
+            A->value=S->value;
+            P=S->parent;
+            if(P->right==S) {
+                P->right = S->right;
+            } else {
+                P->left = S->right;
+            }
+            freeNode(&S);
+        }
+        D->size--;
     }
-
 }
 
 VAL_TYPE beginForward(Dictionary D) {
@@ -205,8 +298,6 @@ VAL_TYPE currentVal(Dictionary D) {
     return VAL_UNDEF;
 }
 
-Node Transverse();
-
 VAL_TYPE next(Dictionary D) {
     if(D==NULL) {
         printf("ERROR on next");
@@ -217,7 +308,7 @@ VAL_TYPE next(Dictionary D) {
     }
     Node A = D->cursor;
     if(A->right !=NULL) {
-        Node current=D->cursor->right;
+        Node current=A->right;
         while(current->left!=NULL) {
             current=current->left;
         }
@@ -235,7 +326,36 @@ VAL_TYPE next(Dictionary D) {
     }
     D->cursor = temp;
     return temp->value;
+}
 
+VAL_TYPE prev(Dictionary D) {
+    if(D==NULL) {
+        fprintf(stderr,"ERROR on prev");
+        exit(1);
+    }
+    if(D->cursor ==NULL) {
+        return VAL_UNDEF;
+    }
+    Node A= D->cursor;
+    if(A->left !=NULL) {
+        Node current = A->left;
+        while(current->right!=NULL) {
+            current=current->right;
+        }
+        D->cursor=current;
+        return current->value;
+    }
+    Node temp=A->parent;
+    while(temp!=NULL && A==temp->left) {
+        A=temp;
+        temp=temp->parent;
+    }
+    if(temp==NULL) {
+        D->cursor=temp;
+        return VAL_UNDEF;
+    }
+    D->cursor=temp;
+    return temp->value;
 }
 
 void printDictionary(FILE* out, Dictionary D) {
@@ -243,7 +363,11 @@ void printDictionary(FILE* out, Dictionary D) {
         printf("ERRORon print");
         exit(1);
     }
-
+    beginForward(D);
+    for(int i=0;i<size(D);i++) {
+        fprintf(out,"%s %d\n",currentKey(D),currentVal(D));
+        next(D);
+    }
 
 }
 
