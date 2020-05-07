@@ -15,8 +15,6 @@ typedef NodeObj *Node;
 
 typedef struct DictionaryObj {
     Node root;
-    int key;
-    int value;
     int unique;
     int size;
     Node cursor;
@@ -41,8 +39,6 @@ void freeNode(Node *pN) {
 Dictionary newDictionary(int unique) {
     Dictionary d= malloc(sizeof(struct DictionaryObj));
     d->root=NULL;
-    d->key=0;
-    d->value=0;
     d->size=0;
     d->cursor=NULL;
     if(unique==0) {
@@ -55,7 +51,7 @@ Dictionary newDictionary(int unique) {
 
 void freeDictionary(Dictionary* pD) {
     if(pD!=NULL && *pD !=NULL) {
-       
+        makeEmpty(*(pD));
         free(*pD);
         *pD =NULL;
     }
@@ -241,6 +237,21 @@ void delete(Dictionary D, KEY_TYPE k) {
             freeNode(&S);
         }
         D->size--;
+    }
+}
+
+void makeEmpty(Dictionary D) {
+    if(D==NULL) {
+        fprintf(stderr,"ERROR on makeEmpty");
+        exit(1);
+    }
+    D->root=NULL;
+    D->size=0;
+    D->cursor=NULL;
+    beginForward(D);
+    for(int i=0;i<size(D);i++) {
+        delete(D,currentKey(D));
+        next(D);
     }
 }
 
