@@ -27,10 +27,13 @@ int main(int argc, char *argv[]) {
   char array[count][255];
   fclose(infile);
   infile = fopen(argv[1], "r");
-
-  while (fscanf(infile, "%s", array[array_index]) == 1) {
+  while ((fgets(array[array_index], sizeof(array[array_index]), infile))) {
     array_index++;
   }
+
+  //while (fscanf(infile, "%s", array[array_index]) == 1) {
+   // array_index++;
+ // }
 
   Dictionary d = newDictionary(1);
   for (int i = 0; i < array_index; i++) {
@@ -38,7 +41,7 @@ int main(int argc, char *argv[]) {
   }
   beginForward(d);
   for (int i = 0; i < size(d); i++) {
-    printf("%s\n", currentKey(d));
+    printf("%s", currentKey(d));
     next(d);
   }
   fclose(infile);
