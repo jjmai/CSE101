@@ -1,4 +1,5 @@
 #include "Dictionary.h"
+#include <assert.h>
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
@@ -22,6 +23,7 @@ typedef struct DictionaryObj {
 
 Node newNode(char *k, int v) {
   Node n = malloc(sizeof(NodeObj));
+  assert(n);
   n->key = k;
   n->value = v;
   n->left = NULL;
@@ -38,6 +40,7 @@ void freeNode(Node *pN) {
 
 Dictionary newDictionary(int unique) {
   Dictionary d = malloc(sizeof(struct DictionaryObj));
+  assert(d);
   d->root = NULL;
   d->size = 0;
   d->cursor = NULL;
@@ -105,10 +108,6 @@ void insert(Dictionary D, KEY_TYPE k, VAL_TYPE v) {
   if (D == NULL) {
     printf("ERROR on insert");
     exit(1);
-  }
-  bool check = false;
-  if (getUnique(D) == 1) {
-    check = true;
   }
   if (getUnique(D) == 1) {
     if (lookup(D, k) == VAL_UNDEF) {

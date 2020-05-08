@@ -31,9 +31,9 @@ int main(int argc, char *argv[]) {
     array_index++;
   }
 
-  //while (fscanf(infile, "%s", array[array_index]) == 1) {
-   // array_index++;
- // }
+  // while (fscanf(infile, "%s", array[array_index]) == 1) {
+  // array_index++;
+  // }
 
   Dictionary d = newDictionary(1);
   for (int i = 0; i < array_index; i++) {
@@ -41,7 +41,7 @@ int main(int argc, char *argv[]) {
   }
   beginForward(d);
   for (int i = 0; i < size(d); i++) {
-    printf("%s", currentKey(d));
+    fprintf(outfile,"%s", currentKey(d));
     next(d);
   }
   fclose(infile);
