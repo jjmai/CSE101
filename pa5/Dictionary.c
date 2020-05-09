@@ -1,3 +1,9 @@
+/*********************************
+ * Jordan Mai, jmai12
+ * 2020 Spring CSE101 PA5
+ * Dictionary ADT
+ ********************************/
+
 #include "Dictionary.h"
 #include <assert.h>
 #include <stdbool.h>
@@ -59,7 +65,7 @@ void freeDictionary(Dictionary *pD) {
     *pD = NULL;
   }
 }
-
+// returns how many pairs
 int size(Dictionary D) {
   if (D == NULL) {
     printf("ERROR on size");
@@ -79,7 +85,7 @@ int getUnique(Dictionary D) {
     return 0;
   }
 }
-
+// recursive to determine key
 Node findKey(Node n, KEY_TYPE k) {
   if (n == NULL || KEY_CMP(k, n->key) == 0) {
     return n;
@@ -109,6 +115,7 @@ void insert(Dictionary D, KEY_TYPE k, VAL_TYPE v) {
     printf("ERROR on insert");
     exit(1);
   }
+  // no duplicates
   if (getUnique(D) == 1) {
     if (lookup(D, k) == VAL_UNDEF) {
       Node A = D->root;
@@ -155,7 +162,7 @@ void insert(Dictionary D, KEY_TYPE k, VAL_TYPE v) {
     D->size++;
   }
 }
-
+// PROF TanTallo
 void delete (Dictionary D, KEY_TYPE k) {
   if (D == NULL) {
     printf("ERROR on delete");
