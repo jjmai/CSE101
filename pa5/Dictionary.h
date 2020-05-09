@@ -1,20 +1,27 @@
-#include<stdlib.h>
-#include<stdio.h>
-#include<string.h>
+/***************************************
+ * Jordan Mai, jmai12
+ * 2020 Spring CSE101 PA5
+ * Dictionary.h
+ * Header file for Dictionary.c
+ ***************************************/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #ifndef DICTIONARY_H_INCLUDE_
 #define DICTIONARY_H_INCLUDE_
 
-#define KEY_TYPE char*
+#define KEY_TYPE char *
 #define VAL_TYPE int
 #define KEY_UNDEF NULL
 #define VAL_UNDEF -1
 #define KEY_FORMAT "%s"
 #define VAL_FORMAT "%d"
-#define KEY_CMP(x,y) strcmp((x),(y))
+#define KEY_CMP(x, y) strcmp((x), (y))
 
 // Exported type --------------------------------------------------------------
-typedef struct DictionaryObj* Dictionary;
+typedef struct DictionaryObj *Dictionary;
 
 // Constructors-Destructors ---------------------------------------------------
 
@@ -30,7 +37,7 @@ Dictionary newDictionary(int unique);
 // freeDictionary()
 
 // Frees heap memory associated with *pD, sets *pD to NULL.
-void freeDictionary(Dictionary* pD);
+void freeDictionary(Dictionary *pD);
 
 // Access functions -----------------------------------------------------------
 
@@ -62,7 +69,7 @@ void insert(Dictionary D, KEY_TYPE k, VAL_TYPE v);
 // delete()
 // Remove the pair whose key is k from Dictionary D.
 // Pre: lookup(D,k)!=VAL_UNDEF (i.e. D contains a pair whose key is k.)
-void delete(Dictionary D, KEY_TYPE k);
+void delete (Dictionary D, KEY_TYPE k);
 
 // makeEmpty()
 // Reset Dictionary D to the empty state, containing no pairs.
@@ -116,7 +123,6 @@ VAL_TYPE prev(Dictionary D);
 // value pair is printed on a single line, with the two items separated by a
 // single space.  The pairs are printed in the order defined by the operator
 // KEY_CMP().
-void printDictionary(FILE* out, Dictionary D);
+void printDictionary(FILE *out, Dictionary D);
 
 #endif
-
