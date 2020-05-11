@@ -251,16 +251,17 @@ void makeEmpty(Dictionary D) {
     fprintf(stderr, "ERROR on makeEmpty");
     exit(1);
   }
-  
+  D->root=NULL;
+  D->size=0;
+  D->cursor=NULL;
   beginForward(D);
   for (int i = 0; i < size(D); i++) {
     delete (D, currentKey(D));
     next(D);
   }
-  D->root = NULL;
-  D->size = 0;
-  D->cursor = NULL;
-
+  //D->root = NULL;
+ // D->size = 0;
+ // D->cursor = NULL;
 }
 
 VAL_TYPE beginForward(Dictionary D) {
