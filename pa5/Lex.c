@@ -39,7 +39,7 @@ int main(int argc, char *argv[]) {
     array_index++;
   }
 
-  Dictionary d = newDictionary(1);
+  Dictionary d = newDictionary(0);
   for (int i = 0; i < array_index; i++) {
     insert(d, array[i], i);
   }
