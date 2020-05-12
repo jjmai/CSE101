@@ -34,7 +34,7 @@ Dictionary.o		:	Dictionary.c
 			$(CC) -c Dictionary.c
 
 clean			:
-			rm -rf *.o Lex infer-out
+			rm -rf *.o Lex DictionaryTest infer-out
 
 format			:
 			clang-format -i -style=file *.c *.h
