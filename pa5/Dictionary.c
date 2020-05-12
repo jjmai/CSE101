@@ -44,6 +44,14 @@ void freeNode(Node *pN) {
   }
 }
 
+void deleteAll(Node R) {
+    if(R!=NULL) {
+        deleteAll(R->left);
+        deleteAll(R->right);
+        freeNode(&R);
+    }
+}
+
 Dictionary newDictionary(int unique) {
   Dictionary d = malloc(sizeof(struct DictionaryObj));
   assert(d);
@@ -251,17 +259,20 @@ void makeEmpty(Dictionary D) {
     fprintf(stderr, "ERROR on makeEmpty");
     exit(1);
   }
-  D->root=NULL;
-  D->size=0;
-  D->cursor=NULL;
-  beginForward(D);
-  for (int i = 0; i < size(D); i++) {
-    delete (D, currentKey(D));
-    next(D);
-  }
-  //D->root = NULL;
- // D->size = 0;
- // D->cursor = NULL;
+ // D->root = NULL;
+  //D->size = 0;
+  //D->cursor = NULL;
+  //D->unique=0;
+  //beginForward(D);
+  //for (int i = 0; i < size(D); i++) {
+    //delete (D, currentKey(D));
+    //next(D);
+  //}
+  deleteAll(D->root);
+
+  D->root = NULL;
+  D->size = 0;
+  D->cursor = NULL;
 }
 
 VAL_TYPE beginForward(Dictionary D) {

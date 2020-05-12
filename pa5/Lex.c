@@ -14,7 +14,7 @@ int main(int argc, char *argv[]) {
     exit(1);
   }
   char lines;
-  int count=0;
+  int count = 0;
   int array_index = 0;
   FILE *infile;
   FILE *outfile;
@@ -40,7 +40,7 @@ int main(int argc, char *argv[]) {
   for (int i = 0; i < count; i++) {
     ptr[i] = calloc(255, sizeof(char));
   }
-  while (fgets(ptr[array_index],255,infile)){
+  while (fgets(ptr[array_index], 255, infile)) {
     array_index++;
   }
   for (int i = 0; i < array_index; i++) {
@@ -55,4 +55,8 @@ int main(int argc, char *argv[]) {
   fclose(infile);
   fclose(outfile);
   freeDictionary(&d);
+  for (int i = 0; i < count; i++) {
+    free(ptr[i]);
+  }
+  free(ptr);
 }
