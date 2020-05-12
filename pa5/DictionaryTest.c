@@ -56,7 +56,7 @@ int main() {
   if (size(A) == 2 && size(B) == 2) {
     printf("YES both dic is size 2\n");
   }
-  insert(A, "a",6);
+  insert(A, "a", 6);
   if (size(A) == 2) {
     printf("success no duplicates\n");
   }

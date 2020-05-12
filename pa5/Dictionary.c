@@ -24,7 +24,7 @@ typedef struct DictionaryObj {
   Node root;
   int unique;
   int size;
-  Node cursor;
+  Node cursor; // for move functions
 } DictionaryObj;
 
 Node newNode(char *k, int v) {
@@ -43,13 +43,13 @@ void freeNode(Node *pN) {
     *pN = NULL;
   }
 }
-//PROF TANTALLO
+// PROF TANTALLO
 void deleteAll(Node R) {
-    if(R!=NULL) {
-        deleteAll(R->left);
-        deleteAll(R->right);
-        freeNode(&R);
-    }
+  if (R != NULL) {
+    deleteAll(R->left);
+    deleteAll(R->right);
+    freeNode(&R);
+  }
 }
 
 Dictionary newDictionary(int unique) {
@@ -87,6 +87,7 @@ int getUnique(Dictionary D) {
     printf("ERROR get UNIQU");
     exit(1);
   }
+  // 1 == duplicates
   if (D->unique == 1) {
     return 1;
   } else {
@@ -266,7 +267,7 @@ void makeEmpty(Dictionary D) {
   D->size = 0;
   D->cursor = NULL;
 }
-
+// set cursor at first smallest node
 VAL_TYPE beginForward(Dictionary D) {
   if (D == NULL) {
     printf("error on beginforward");
@@ -282,7 +283,7 @@ VAL_TYPE beginForward(Dictionary D) {
   }
   return VAL_UNDEF;
 }
-
+// set cursor to last biggest node
 VAL_TYPE beginReverse(Dictionary D) {
   if (D == NULL) {
     printf("error on beginReverse");
@@ -298,7 +299,7 @@ VAL_TYPE beginReverse(Dictionary D) {
   }
   return VAL_UNDEF;
 }
-
+// cursor key
 KEY_TYPE currentKey(Dictionary D) {
   if (D == NULL) {
     printf("ERROR ON currentKEY");
@@ -309,7 +310,7 @@ KEY_TYPE currentKey(Dictionary D) {
   }
   return KEY_UNDEF;
 }
-
+// cursor value
 VAL_TYPE currentVal(Dictionary D) {
   if (D == NULL) {
     printf("ERROR ON currentKEY");
@@ -320,7 +321,7 @@ VAL_TYPE currentVal(Dictionary D) {
   }
   return VAL_UNDEF;
 }
-
+// move to next node from cursor
 VAL_TYPE next(Dictionary D) {
   if (D == NULL) {
     printf("ERROR on next");
@@ -350,7 +351,7 @@ VAL_TYPE next(Dictionary D) {
   D->cursor = temp;
   return temp->value;
 }
-
+// move prev node from cursor
 VAL_TYPE prev(Dictionary D) {
   if (D == NULL) {
     fprintf(stderr, "ERROR on prev");

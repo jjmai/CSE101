@@ -25,7 +25,7 @@ int main(int argc, char *argv[]) {
     exit(1);
   }
   outfile = fopen(argv[2], "w");
-
+  // count lines
   while ((lines = fgetc(infile)) != EOF) {
     if (lines == '\n') {
       count++;
@@ -35,6 +35,7 @@ int main(int argc, char *argv[]) {
   infile = fopen(argv[1], "r");
 
   Dictionary d = newDictionary(0);
+  // create an array of strings
   char **ptr;
   ptr = calloc(count, sizeof(char *));
   for (int i = 0; i < count; i++) {
@@ -59,4 +60,5 @@ int main(int argc, char *argv[]) {
     free(ptr[i]);
   }
   free(ptr);
+  ptr = NULL;
 }
