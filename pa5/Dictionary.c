@@ -43,7 +43,7 @@ void freeNode(Node *pN) {
     *pN = NULL;
   }
 }
-
+//PROF TANTALLO
 void deleteAll(Node R) {
     if(R!=NULL) {
         deleteAll(R->left);
@@ -94,6 +94,7 @@ int getUnique(Dictionary D) {
   }
 }
 // recursive to determine key
+// PROF TANTALLO
 Node findKey(Node n, KEY_TYPE k) {
   if (n == NULL || KEY_CMP(k, n->key) == 0) {
     return n;
@@ -259,15 +260,6 @@ void makeEmpty(Dictionary D) {
     fprintf(stderr, "ERROR on makeEmpty");
     exit(1);
   }
- // D->root = NULL;
-  //D->size = 0;
-  //D->cursor = NULL;
-  //D->unique=0;
-  //beginForward(D);
-  //for (int i = 0; i < size(D); i++) {
-    //delete (D, currentKey(D));
-    //next(D);
-  //}
   deleteAll(D->root);
 
   D->root = NULL;
