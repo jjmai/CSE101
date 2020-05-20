@@ -4,8 +4,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-void leftRotate(Dictionary D, KEY_TYPE x);
-void rightRotate(Dictionary D, KEY_TYPE x);
 void rbInsert(Dictionary D, KEY_TYPE z);
 void rbDelete(Dictionary D, KEY_TYPE z);
 
@@ -25,6 +23,8 @@ void post(FILE *out, Dictionary D, Node z);
 void rbTransplant(Dictionary D, Node x, Node y);
 void rbInsertFixUp(Dictionary D, Node z);
 void rbDeleteFixUp(Dictionary D, Node x);
+void leftRotate(Dictionary D, Node x);
+void rightRotate(Dictionary D, Node x);
 
 typedef struct DictionaryObj {
   Node root;
@@ -53,10 +53,10 @@ void freeNode(Node *pN) {
   }
 }
 
-void deleteAll(Dictionary D,Node R) {
+void deleteAll(Dictionary D, Node R) {
   if (R != D->nil) {
-    deleteAll(D,R->left);
-    deleteAll(D,R->right);
+    deleteAll(D, R->left);
+    deleteAll(D, R->right);
     freeNode(&R);
   }
 }
@@ -150,7 +150,7 @@ void makeEmpty(Dictionary D) {
     fprintf(stderr, "ERROR on makeEmpty");
     exit(1);
   }
-  deleteAll(D,D->root);
+  deleteAll(D, D->root);
   D->root = D->nil;
   D->size = 0;
   D->cursor = D->nil;
@@ -299,20 +299,14 @@ void post(FILE *out, Dictionary D, Node z) {
   fprintf(out, "%s", z->key);
 }
 
-void leftRotate(Dictionary D, KEY_TYPE x) {
+void leftRotate(Dictionary D, Node x) {
   if (D == NULL) {
     printf("ERROR on leftrotate");
     exit(1);
   }
-  Node A = D->root;
+  Node A = x;
   Node y;
-  while (KEY_CMP(x, A->key) != 0) {
-    if (KEY_CMP(x, A->key) < 0) {
-      A = A->left;
-    } else {
-      A = A->right;
-    }
-  }
+
   y = A->right;
   A->right = y->left;
   if (y->left != D->nil) {
@@ -330,20 +324,14 @@ void leftRotate(Dictionary D, KEY_TYPE x) {
   A->parent = y;
 }
 
-void rightRotate(Dictionary D, KEY_TYPE x) {
+void rightRotate(Dictionary D, Node x) {
   if (D == NULL) {
     printf("ERROR on right rotate");
     exit(1);
   }
-  Node A = D->root;
+  Node A = x;
   Node y = D->nil;
-  while (KEY_CMP(x, A->key) != 0) {
-    if (KEY_CMP(x, A->key) < 0) {
-      A = A->left;
-    } else {
-      A = A->right;
-    }
-  }
+
   y = A->left;
   A->left = y->right;
   if (y->right != D->nil) {
@@ -400,7 +388,7 @@ void rbInsertFixUp(Dictionary D, Node z) {
   }
   Node A = z;
   Node y = D->nil;
-  
+
   while (A->parent != D->nil && A->parent->color == 'r') {
     if (A->parent == A->parent->parent->left) {
       y = A->parent->parent->right;
@@ -412,11 +400,11 @@ void rbInsertFixUp(Dictionary D, Node z) {
       } else {
         if (A == A->parent->right) {
           A = A->parent;
-          leftRotate(D, A->key);
+          leftRotate(D, A);
         }
         A->parent->color = 'b';
         A->parent->parent->color = 'r';
-        rightRotate(D, A->parent->parent->key);
+        rightRotate(D, A->parent->parent);
       }
     } else {
       y = A->parent->parent->left;
@@ -428,11 +416,11 @@ void rbInsertFixUp(Dictionary D, Node z) {
       } else {
         if (A == A->parent->left) {
           A = A->parent;
-          rightRotate(D, A->key);
+          rightRotate(D, A);
         }
         A->parent->color = 'b';
         A->parent->parent->color = 'r';
-        leftRotate(D, A->parent->parent->key);
+        leftRotate(D, A->parent->parent);
       }
     }
   }
@@ -513,7 +501,7 @@ void rbDeleteFixUp(Dictionary D, Node x) {
       if (w->color == 'r') {
         w->color = 'b';
         x->parent->color = 'r';
-        leftRotate(D, x->parent->key);
+        leftRotate(D, x->parent);
         w = x->parent->right;
       }
       if (w->left->color == 'b' && w->right->color == 'b') {
@@ -523,13 +511,13 @@ void rbDeleteFixUp(Dictionary D, Node x) {
         if (w->right->color == 'b') {
           w->left->color = 'b';
           w->color = 'r';
-          rightRotate(D, w->key);
+          rightRotate(D, w);
           w = x->parent->right;
         }
         w->color = x->parent->color;
         x->parent->color = 'b';
         w->right->color = 'b';
-        leftRotate(D, x->parent->key);
+        leftRotate(D, x->parent);
         x = D->root;
       }
     } else {
@@ -537,7 +525,7 @@ void rbDeleteFixUp(Dictionary D, Node x) {
       if (w->color == 'r') {
         w->color = 'b';
         x->parent->color = 'r';
-        rightRotate(D, x->parent->key);
+        rightRotate(D, x->parent);
         w = x->parent->left;
       }
       if (w->right->color == 'b' && w->left->color == 'b') {
@@ -547,13 +535,13 @@ void rbDeleteFixUp(Dictionary D, Node x) {
         if (w->left->color == 'b') {
           w->right->color = 'b';
           w->color = 'r';
-          leftRotate(D, w->key);
+          leftRotate(D, w);
           w = x->parent->left;
         }
         w->color = x->parent->color;
         x->parent->color = 'b';
         w->left->color = 'b';
-        rightRotate(D, x->parent->key);
+        rightRotate(D, x->parent);
         x = D->root;
       }
     }
