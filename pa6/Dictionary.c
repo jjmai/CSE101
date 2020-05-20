@@ -444,3 +444,125 @@ void rbInsertFixUp(Dictionary D, KEY_TYPE z) {
   }
   D->root->color = 'b';
 }
+
+void rbTransplant(Dictionary D,Node x, Node y) {
+    if( D==NULL) {
+        printf("ERROR on rbTransplant");
+        exit(1);
+    }
+    if(x->parent==NULL) {
+        D->root=y;
+    } else if (x==x->parent->left) {
+        x->parent->left=y;
+    } else {
+        x->parent->right=y;
+    }
+    y->parent=x->parent;
+}
+
+void rbDelete(Dictionary D, KEY_TYPE z) {
+    if(D==NULL) {
+        printf("error on rb Delete");
+        exit(1);
+    }
+    Node A= D->root;
+    Node y =D->nil;
+    Node x= D->nil;
+    while(KEY_CMP(z,A->key)!=0) {
+        if(KEY_CMP(z,A->key)<0) {
+            A=A->left;
+        } else {
+            A=A->right;
+        }
+    }
+    y=A;
+    char o_color= y->color;
+    if(A->left==D->nil) {
+        x=A->right;
+        rbTransplant(D,A,A->left);
+    } else if(A->right==D->nil) {
+        x=A->left;
+        rbTransplant(D,A,A->left);
+    } else {
+        y=D->root;
+        while(y->left!=D->nil) {
+            y = y->left;
+        }
+        x=y->right;
+        o_color=y->color;
+        if(y->parent==A) {
+            x->parent=y;
+        } else {
+            rbTransplant(D,y,y->right);
+            y->right=A->right;
+            y->right->parent=y;
+        }
+        rbTransplant(D,A,y);
+        y->left=A->left;
+        y->left->parent=y;
+        y->color=A->color;
+    }
+    if(o_color=='b') {
+        rbDeleteFixUp(D,x);
+    }
+}
+
+void rbDeleteFixUp(Dictionary D, Node x) {
+    if(D==NULL) {
+        printf("ERROR on rbdeletefixup");
+        exit(1);
+    }
+    Node w=D->nil;
+    while(x !=D->root && x->color =='b') {
+        if(x==x->parent->left) {
+           w=x->parent->right;
+           if(w->color=='r') {
+               w->color='b';
+               x->parent->color='r';
+               leftRotate(D,x->parent->key);
+               w=x->parent->right;
+           }
+           if(w->left->color== 'b' && w->right->color== 'b') {
+               w->color='r';
+               x=x->parent;
+           } else {
+                   if (w->right->color =='b') {
+                       w->left->color = 'b';
+                       w->color = 'r';
+                       rightRotate(D, w->key);
+                       w = x->parent->right;
+                   }
+                   w->color=x->parent->color;
+                   x->parent->color='b';
+                   w->right->color='b';
+                   leftRotate(D,x->parent->key);
+                   x=D->root;
+           }
+        } else {
+            w=x->parent->left;
+            if(w->color=='r') {
+                w->color='b';
+                x->parent->color='r';
+                rightRotate(D,x->parent->key);
+                w=x->parent->left;
+            }
+            if(w->right->color=='b' && w->left->color=='b') {
+                w->color='r';
+                x=x->parent;
+            }else {
+                if(w->left->color=='b') {
+                    w->right->color='b';
+                    w->color='r';
+                    leftRotate(D,w->key);
+                    w=x->parent->left;
+                }
+                w->color=x->parent->color;
+                x->parent->color='b';
+                w->left->color='b';
+                rightRotate(D,x->parent->key);
+                x=D->root;
+            }
+        }
+    }
+    x->color='b';
+}
