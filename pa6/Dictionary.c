@@ -163,7 +163,7 @@ VAL_TYPE beginForward(Dictionary D) {
   }
   if (size(D) > 0) {
     Node A = D->root;
-    while (A->left != NULL) {
+    while (A->left != D->nil) {
       A = A->left;
     }
     D->cursor = A;
@@ -178,7 +178,7 @@ VAL_TYPE beginReverse(Dictionary D) {
   }
   if (size(D) > 0) {
     Node A = D->root;
-    while (A->right != NULL) {
+    while (A->right != D->nil) {
       A = A->right;
     }
     D->cursor = A;
@@ -192,7 +192,7 @@ KEY_TYPE currentKey(Dictionary D) {
     printf("ERROR ON currentKEY");
     exit(1);
   }
-  if (D->cursor != NULL) {
+  if (D->cursor != D->nil) {
     return D->cursor->key;
   }
   return KEY_UNDEF;
@@ -203,7 +203,7 @@ VAL_TYPE currentVal(Dictionary D) {
     printf("ERROR ON currentKEY");
     exit(1);
   }
-  if (D->cursor != NULL) {
+  if (D->cursor != D->nil) {
     return D->cursor->value;
   }
   return VAL_UNDEF;
@@ -214,25 +214,25 @@ VAL_TYPE next(Dictionary D) {
     printf("ERROR on next");
     exit(1);
   }
-  if (D->cursor == NULL) {
+  if (D->cursor == D->nil) {
     return VAL_UNDEF;
   }
   Node A = D->cursor;
-  if (A->right != NULL) {
+  if (A->right != D->nil) {
     Node current = A->right;
-    while (current->left != NULL) {
+    while (current->left != D->nil) {
       current = current->left;
     }
     D->cursor = current;
     return current->value;
   }
   Node temp = A->parent;
-  while (temp != NULL && A == temp->right) {
+  while (temp != D->nil && A == temp->right) {
     A = temp;
     temp = temp->parent;
   }
-  if (temp == NULL) {
-    D->cursor = NULL;
+  if (temp == D->nil) {
+    D->cursor = D->nil;
     return VAL_UNDEF;
   }
   D->cursor = temp;
@@ -244,24 +244,24 @@ VAL_TYPE prev(Dictionary D) {
     fprintf(stderr, "ERROR on prev");
     exit(1);
   }
-  if (D->cursor == NULL) {
+  if (D->cursor == D->nil) {
     return VAL_UNDEF;
   }
   Node A = D->cursor;
-  if (A->left != NULL) {
+  if (A->left != D->nil) {
     Node current = A->left;
-    while (current->right != NULL) {
+    while (current->right != D->nil) {
       current = current->right;
     }
     D->cursor = current;
     return current->value;
   }
   Node temp = A->parent;
-  while (temp != NULL && A == temp->left) {
+  while (temp != D->nil && A == temp->left) {
     A = temp;
     temp = temp->parent;
   }
-  if (temp == NULL) {
+  if (temp == D->nil) {
     D->cursor = temp;
     return VAL_UNDEF;
   }
