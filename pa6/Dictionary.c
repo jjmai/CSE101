@@ -53,10 +53,10 @@ void freeNode(Node *pN) {
   }
 }
 
-void deleteAll(Node R) {
-  if (R != NULL) {
-    deleteAll(R->left);
-    deleteAll(R->right);
+void deleteAll(Dictionary D,Node R) {
+  if (R != D->nil) {
+    deleteAll(D,R->left);
+    deleteAll(D,R->right);
     freeNode(&R);
   }
 }
@@ -150,10 +150,10 @@ void makeEmpty(Dictionary D) {
     fprintf(stderr, "ERROR on makeEmpty");
     exit(1);
   }
-  deleteAll(D->root);
-  D->root = NULL;
+  deleteAll(D,D->root);
+  D->root = D->nil;
   D->size = 0;
-  D->cursor = NULL;
+  D->cursor = D->nil;
 }
 
 VAL_TYPE beginForward(Dictionary D) {
@@ -275,7 +275,7 @@ void printDictionary(FILE *out, Dictionary D, const char *ord) {
   } else if (KEY_CMP(ord, "in") == 0) {
     beginForward(D);
     for (int i = 0; i < size(D); i++) {
-      fprintf(out,"%s \n", currentKey(D));
+      fprintf(out, "%s", currentKey(D));
       next(D);
     }
   } else if (KEY_CMP(ord, "post") == 0) {
@@ -286,7 +286,7 @@ void pre(FILE *out, Dictionary D, Node z) {
   if (z == D->nil) {
     return;
   }
-  fprintf(out, "%s\n", z->key);
+  fprintf(out, "%s", z->key);
   pre(out, D, z->left);
   pre(out, D, z->right);
 }
@@ -296,7 +296,7 @@ void post(FILE *out, Dictionary D, Node z) {
   }
   post(out, D, z->left);
   post(out, D, z->right);
-  fprintf(out, "%s\n", z->key);
+  fprintf(out, "%s", z->key);
 }
 
 void leftRotate(Dictionary D, KEY_TYPE x) {
