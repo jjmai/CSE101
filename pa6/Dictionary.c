@@ -7,7 +7,6 @@
 void leftRotate(Dictionary D, KEY_TYPE x);
 void rightRotate(Dictionary D, KEY_TYPE x);
 void rbInsert(Dictionary D, KEY_TYPE z);
-void rbInsertFixUp(Dictionary D, KEY_TYPE z);
 void rbDelete(Dictionary D, KEY_TYPE z);
 
 typedef struct NodeObj {
@@ -24,6 +23,7 @@ typedef NodeObj *Node;
 void pre(FILE *out, Dictionary D, Node z);
 void post(FILE *out, Dictionary D, Node z);
 void rbTransplant(Dictionary D, Node x, Node y);
+void rbInsertFixUp(Dictionary D, Node z);
 void rbDeleteFixUp(Dictionary D, Node x);
 
 typedef struct DictionaryObj {
@@ -390,23 +390,17 @@ void rbInsert(Dictionary D, KEY_TYPE z) {
     new->left = D->nil;
     new->right = D->nil;
     new->color = 'r';
-    rbInsertFixUp(D, new->key);
+    rbInsertFixUp(D, new);
   }
 }
-void rbInsertFixUp(Dictionary D, KEY_TYPE z) {
+void rbInsertFixUp(Dictionary D, Node z) {
   if (D == NULL) {
     printf("ERROR on rbinsertfixup");
     exit(1);
   }
-  Node A = D->root;
+  Node A = z;
   Node y = D->nil;
-  while (KEY_CMP(z, A->key) != 0) {
-    if (KEY_CMP(z, A->key) < 0) {
-      A = A->left;
-    } else if (KEY_CMP(z, A->key) >= 0) {
-      A = A->right;
-    }
-  }
+  
   while (A->parent != D->nil && A->parent->color == 'r') {
     if (A->parent == A->parent->parent->left) {
       y = A->parent->parent->right;
