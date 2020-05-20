@@ -4,24 +4,23 @@
 // and VAL_TYPE.
 //----------------------------------------------------------------------------
 
-#include<stdlib.h>
-#include<stdio.h>
-#include<string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #ifndef DICTIONARY_H_INCLUDE_
 #define DICTIONARY_H_INCLUDE_
 
-#define KEY_TYPE char*
-#define VAL_TYPE int*
+#define KEY_TYPE char *
+#define VAL_TYPE int *
 #define KEY_UNDEF NULL
 #define VAL_UNDEF NULL
 #define KEY_FORMAT "%s"
 #define VAL_FORMAT "%p"
-#define KEY_CMP(x,y) strcmp(x,y)
+#define KEY_CMP(x, y) strcmp(x, y)
 
 // Exported type --------------------------------------------------------------
-typedef struct DictionaryObj* Dictionary;
-
+typedef struct DictionaryObj *Dictionary;
 
 // Constructors-Destructors ---------------------------------------------------
 //
@@ -35,8 +34,7 @@ typedef struct DictionaryObj* Dictionary;
 Dictionary newDictionary(int unique);
 // freeDictionary()
 // Frees heap memory associated with *pD, sets *pD to NULL.
-void freeDictionary(Dictionary* pD);
-
+void freeDictionary(Dictionary *pD);
 
 // Access functions -----------------------------------------------------------
 
@@ -67,7 +65,7 @@ void insert(Dictionary D, KEY_TYPE k, VAL_TYPE v);
 // delete()
 // Remove the pair whose key is k from Dictionary D.
 // Pre: lookup(D,k)!=VAL_UNDEF (i.e. D contains a pair whose key is k.)
-void delete(Dictionary D, KEY_TYPE k);
+void delete (Dictionary D, KEY_TYPE k);
 
 // makeEmpty()
 // Reset Dictionary D to the empty state, containing no pairs.
@@ -121,7 +119,6 @@ VAL_TYPE prev(Dictionary D);
 // If ord is "pre", "in" or "post", executes the corresponding tree traversal
 // on the underlying RBT, printing keys only (no values).  If ord is some
 // other string, prints nothing.
-void printDictionary(FILE* out, Dictionary D, const char* ord);
-
+void printDictionary(FILE *out, Dictionary D, const char *ord);
 
 #endif
