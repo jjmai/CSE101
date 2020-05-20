@@ -4,12 +4,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-void rbInsert(Dictionary D, KEY_TYPE z);
+void rbInsert(Dictionary D, KEY_TYPE z, VAL_TYPE v);
 void rbDelete(Dictionary D, KEY_TYPE z);
 
 typedef struct NodeObj {
-  char *key;
-  int *value;
+  KEY_TYPE key;
+  VAL_TYPE value;
   char color;
   struct NodeObj *left;
   struct NodeObj *right;
@@ -132,7 +132,7 @@ void insert(Dictionary D, KEY_TYPE k, VAL_TYPE v) {
     printf("ERROR on insert");
     exit(1);
   }
-  rbInsert(D, k);
+  rbInsert(D, k, v);
   D->size++;
 }
 
@@ -349,7 +349,7 @@ void rightRotate(Dictionary D, Node x) {
   A->parent = y;
 }
 
-void rbInsert(Dictionary D, KEY_TYPE z) {
+void rbInsert(Dictionary D, KEY_TYPE z, VAL_TYPE v) {
   if (D == NULL) {
     printf("ERROR on rbinsert");
     exit(1);
@@ -357,7 +357,7 @@ void rbInsert(Dictionary D, KEY_TYPE z) {
   if (getUnique(D) == 1) {
     Node y = D->nil;
     Node A = D->root;
-    Node new = newNode(z, NULL);
+    Node new = newNode(z, v);
     while (A != D->nil) {
       y = A;
       if (KEY_CMP(z, A->key) < 0) {
