@@ -53,13 +53,13 @@ void freeNode(Node *pN) {
   }
 }
 
-void deleteAll(Dictionary D, Node R) {
-  if (R != D->nil) {
-    deleteAll(D, R->left);
-    deleteAll(D, R->right);
-    freeNode(&R);
-  }
-}
+//void deleteAll(Dictionary D, Node R) {
+  //if (R != D->nil) {
+    //deleteAll(D, R->left);
+    //deleteAll(D, R->right);
+    //freeNode(&R);
+ // }
+//}
 
 Dictionary newDictionary(int unique) {
   Dictionary d = malloc(sizeof(struct DictionaryObj));
@@ -103,14 +103,14 @@ int getUnique(Dictionary D) {
     return 0;
   }
 }
-Node findKey(Node n, KEY_TYPE k) {
-  if (n == NULL || KEY_CMP(k, n->key) == 0) {
+Node findKey(Dictionary D, Node n, KEY_TYPE k) {
+  if (n == D->nil || KEY_CMP(k, n->key) == 0) {
     return n;
   }
   if (strcmp(k, n->key) < 0) {
-    return findKey(n->left, k);
+    return findKey(D, n->left, k);
   } else {
-    return findKey(n->right, k);
+    return findKey(D, n->right, k);
   }
 }
 
@@ -119,10 +119,12 @@ VAL_TYPE lookup(Dictionary D, KEY_TYPE k) {
     printf("ERROR on lookup");
     exit(1);
   }
-  Node n = NULL;
-  n = findKey(D->root, k);
-  if (n != NULL) {
-    return n->value;
+  if(size(D)>0) { 
+    Node n = NULL;
+    n = findKey(D, D->root, k);
+    if (n != NULL) {
+      return n->value;
+    }
   }
   return VAL_UNDEF;
 }
@@ -133,7 +135,7 @@ void insert(Dictionary D, KEY_TYPE k, VAL_TYPE v) {
     exit(1);
   }
   rbInsert(D, k, v);
-  D->size++;
+  // D->size++;
 }
 
 void delete (Dictionary D, KEY_TYPE k) {
@@ -150,7 +152,7 @@ void makeEmpty(Dictionary D) {
     fprintf(stderr, "ERROR on makeEmpty");
     exit(1);
   }
-  deleteAll(D, D->root);
+ // deleteAll(D, D->root);
   D->root = D->nil;
   D->size = 0;
   D->cursor = D->nil;
@@ -356,16 +358,8 @@ void rbInsert(Dictionary D, KEY_TYPE z, VAL_TYPE v) {
   }
   bool check = false;
   if (getUnique(D) == 1) {
-    Node temp = D->root;
-    while (temp != D->nil) {
-      if (KEY_CMP(z, temp->key) == 0) {
-        check = true;
-        break;
-      } else if (KEY_CMP(z, temp->key) < 0) {
-        temp = temp->left;
-      } else if (KEY_CMP(z, temp->key) > 0) {
-        temp = temp->right;
-      }
+    if (lookup(D, z) != VAL_UNDEF) {
+      check = true;
     }
   }
   if (getUnique(D) == 0 || check == false) {
@@ -393,6 +387,7 @@ void rbInsert(Dictionary D, KEY_TYPE z, VAL_TYPE v) {
     new->right = D->nil;
     new->color = 'r';
     rbInsertFixUp(D, new);
+    D->size++;
   }
 }
 void rbInsertFixUp(Dictionary D, Node z) {
