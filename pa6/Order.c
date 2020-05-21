@@ -1,3 +1,10 @@
+/***********************************************
+ * Jordan Mai, jmai12
+ * Spring 2020 CSE101, PA6
+ * Order.c
+ * Program to sort Lexicographically
+ **************************************************/
+
 #include "Dictionary.h"
 #include <stdio.h>
 
@@ -57,7 +64,6 @@ int main(int argc, char *argv[]) {
   printDictionary(outfile, d, "post");
 
   freeDictionary(&d);
-  // makeEmpty(d);
   fclose(infile);
   fclose(outfile);
   for (int i = 0; i < count; i++) {

@@ -1,3 +1,10 @@
+/*******************************************************
+ * Jordan Mai, jmai12
+ * SPring 2020 CSE101, PA6
+ * Dictionary ADT
+ * Dictionary.c
+ ********************************************************/
+
 #include "Dictionary.h"
 #include <assert.h>
 #include <stdbool.h>
@@ -15,6 +22,7 @@ typedef struct NodeObj {
 
 typedef NodeObj *Node;
 
+// RBT Functions
 void pre(FILE *out, Dictionary D, Node z);
 void post(FILE *out, Dictionary D, Node z);
 void rbTransplant(Dictionary D, Node x, Node y);
@@ -103,6 +111,7 @@ int getUnique(Dictionary D) {
     return 0;
   }
 }
+// returns Node of k, first instance
 Node findKey(Dictionary D, Node n, KEY_TYPE k) {
   if (n == D->nil || KEY_CMP(k, n->key) == 0) {
     return n;
@@ -128,16 +137,15 @@ VAL_TYPE lookup(Dictionary D, KEY_TYPE k) {
   }
   return VAL_UNDEF;
 }
-
+// calls rb =Insert
 void insert(Dictionary D, KEY_TYPE k, VAL_TYPE v) {
   if (D == NULL) {
     printf("ERROR on insert");
     exit(1);
   }
   rbInsert(D, k, v);
-  // D->size++;
 }
-
+// calls rbDelete
 void delete (Dictionary D, KEY_TYPE k) {
   if (D == NULL) {
     printf("ERROR on delete");
@@ -360,12 +368,14 @@ void rbInsert(Dictionary D, KEY_TYPE z, VAL_TYPE v) {
     printf("ERROR on rbinsert");
     exit(1);
   }
+  // if duplicte not allowed
   bool check = false;
   if (getUnique(D) == 1) {
     if (lookup(D, z) != VAL_UNDEF) {
       check = true;
     }
   }
+  // if not unique or no duplicates in D
   if (getUnique(D) == 0 || check == false) {
     Node y = D->nil;
     Node A = D->root;
@@ -460,6 +470,7 @@ void rbDelete(Dictionary D, Node z) {
     printf("error on rb Delete");
     exit(1);
   }
+  // if cursor is the node we are deleting,set NIL
   if (D->cursor != D->nil) {
     if (D->cursor == z) {
       D->cursor = D->nil;
@@ -497,7 +508,6 @@ void rbDelete(Dictionary D, Node z) {
     y->left->parent = y;
     y->color = A->color;
   }
-  //freeNode(&A);
   if (o_color == 'b') {
     rbDeleteFixUp(D, x);
   }

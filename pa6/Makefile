@@ -1,3 +1,17 @@
+#----------------------------------------------------------------
+# Jordan Mai, jmai12
+# CSE101 Spring 2020, PA6
+
+# Makefile for Dictionary ADT
+
+# make				makes Order
+# make DictionaryTest.c		makes Dictionary Test Client
+# make clean			remove all binaries
+# make infer 			checks for errors
+# make format			auto format all *.c *.h
+# make valgrind			checks for memory leaks
+#----------------------------------------------------------------
+
 CFLAGS = -Wall -std=c11
 CC = clang $(CFLAGS)
 MEMCHECK = valgrind --leak-check=full
