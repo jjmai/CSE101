@@ -458,6 +458,11 @@ void rbDelete(Dictionary D, Node z) {
     printf("error on rb Delete");
     exit(1);
   }
+  if (D->cursor != D->nil) {
+    if (D->cursor == z) {
+      D->cursor = D->nil;
+    }
+  }
 
   Node A = z;
   Node y = D->nil;
