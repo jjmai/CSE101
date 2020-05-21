@@ -52,13 +52,13 @@ void freeNode(Node *pN) {
   }
 }
 
-// void deleteAll(Dictionary D, Node R) {
-// if (R != D->nil) {
-// deleteAll(D, R->left);
-// deleteAll(D, R->right);
-// freeNode(&R);
-// }
-//}
+void deleteAll(Dictionary D, Node R) {
+  if (R != D->nil) {
+    deleteAll(D, R->left);
+    deleteAll(D, R->right);
+    freeNode(&R);
+  }
+}
 
 Dictionary newDictionary(int unique) {
   Dictionary d = malloc(sizeof(struct DictionaryObj));
@@ -78,6 +78,7 @@ Dictionary newDictionary(int unique) {
 void freeDictionary(Dictionary *pD) {
   if (pD != NULL && *pD != NULL) {
     makeEmpty(*(pD));
+    freeNode(&(*pD)->nil);
     free(*pD);
     *pD = NULL;
   }
@@ -146,6 +147,7 @@ void delete (Dictionary D, KEY_TYPE k) {
   Node temp = D->nil;
   temp = findKey(D, D->root, k);
   rbDelete(D, temp);
+  freeNode(&temp);
   D->size--;
 }
 
@@ -154,7 +156,7 @@ void makeEmpty(Dictionary D) {
     fprintf(stderr, "ERROR on makeEmpty");
     exit(1);
   }
-  // deleteAll(D, D->root);
+  deleteAll(D, D->root);
   D->root = D->nil;
   D->size = 0;
   D->cursor = D->nil;
@@ -495,6 +497,7 @@ void rbDelete(Dictionary D, Node z) {
     y->left->parent = y;
     y->color = A->color;
   }
+  //freeNode(&A);
   if (o_color == 'b') {
     rbDeleteFixUp(D, x);
   }

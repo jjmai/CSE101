@@ -27,7 +27,7 @@ int main(int argc, char *argv[]) {
   fclose(infile);
   infile = fopen(argv[1], "r");
 
-  Dictionary d = newDictionary(1);
+  Dictionary d = newDictionary(0);
 
   char **ptr;
   ptr = calloc(count, sizeof(char *));
@@ -45,15 +45,22 @@ int main(int argc, char *argv[]) {
                    "\nPRE-ORDER:\n*********************************************"
                    "*********\n");
   printDictionary(outfile, d, "pre");
-  fprintf(outfile,"\n");
+  fprintf(outfile, "\n");
   fprintf(outfile, "******************************************************\nIN-"
                    "ORDER:\n***************************************************"
                    "***\n");
   printDictionary(outfile, d, "in");
-  fprintf(outfile,"\n");
+  fprintf(outfile, "\n");
   fprintf(outfile, "******************************************************"
                    "\nPOST-ORDER:\n********************************************"
                    "**********\n");
   printDictionary(outfile, d, "post");
-  fprintf(outfile,"\n");
+
+  freeDictionary(&d);
+  // makeEmpty(d);
+  fclose(infile);
+  fclose(outfile);
+  for (int i = 0; i < count; i++) {
+    free(ptr[i]);
+  }
 }
