@@ -472,7 +472,7 @@ void rbDelete(Dictionary D, Node z) {
     x = A->left;
     rbTransplant(D, A, A->left);
   } else {
-    y = D->root;
+    y = A->right;
     while (y->left != D->nil) {
       y = y->left;
     }
