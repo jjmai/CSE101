@@ -4,9 +4,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-void rbInsert(Dictionary D, KEY_TYPE z, VAL_TYPE v);
-void rbDelete(Dictionary D, KEY_TYPE z);
-
 typedef struct NodeObj {
   KEY_TYPE key;
   VAL_TYPE value;
@@ -25,6 +22,8 @@ void rbInsertFixUp(Dictionary D, Node z);
 void rbDeleteFixUp(Dictionary D, Node x);
 void leftRotate(Dictionary D, Node x);
 void rightRotate(Dictionary D, Node x);
+void rbInsert(Dictionary D, KEY_TYPE z, VAL_TYPE v);
+void rbDelete(Dictionary D, Node z);
 
 typedef struct DictionaryObj {
   Node root;
@@ -53,12 +52,12 @@ void freeNode(Node *pN) {
   }
 }
 
-//void deleteAll(Dictionary D, Node R) {
-  //if (R != D->nil) {
-    //deleteAll(D, R->left);
-    //deleteAll(D, R->right);
-    //freeNode(&R);
- // }
+// void deleteAll(Dictionary D, Node R) {
+// if (R != D->nil) {
+// deleteAll(D, R->left);
+// deleteAll(D, R->right);
+// freeNode(&R);
+// }
 //}
 
 Dictionary newDictionary(int unique) {
@@ -119,10 +118,10 @@ VAL_TYPE lookup(Dictionary D, KEY_TYPE k) {
     printf("ERROR on lookup");
     exit(1);
   }
-  if(size(D)>0) { 
-    Node n = NULL;
+  if (size(D) > 0) {
+    Node n = D->nil;
     n = findKey(D, D->root, k);
-    if (n != NULL) {
+    if (n != D->nil) {
       return n->value;
     }
   }
@@ -143,7 +142,10 @@ void delete (Dictionary D, KEY_TYPE k) {
     printf("ERROR on delete");
     exit(1);
   }
-  rbDelete(D, k);
+
+  Node temp = D->nil;
+  temp = findKey(D, D->root, k);
+  rbDelete(D, temp);
   D->size--;
 }
 
@@ -152,7 +154,7 @@ void makeEmpty(Dictionary D) {
     fprintf(stderr, "ERROR on makeEmpty");
     exit(1);
   }
- // deleteAll(D, D->root);
+  // deleteAll(D, D->root);
   D->root = D->nil;
   D->size = 0;
   D->cursor = D->nil;
@@ -451,21 +453,16 @@ void rbTransplant(Dictionary D, Node x, Node y) {
   y->parent = x->parent;
 }
 
-void rbDelete(Dictionary D, KEY_TYPE z) {
+void rbDelete(Dictionary D, Node z) {
   if (D == NULL) {
     printf("error on rb Delete");
     exit(1);
   }
-  Node A = D->root;
+ 
+  Node A = z;
   Node y = D->nil;
   Node x = D->nil;
-  while (KEY_CMP(z, A->key) != 0) {
-    if (KEY_CMP(z, A->key) < 0) {
-      A = A->left;
-    } else {
-      A = A->right;
-    }
-  }
+
   y = A;
   char o_color = y->color;
   if (A->left == D->nil) {
