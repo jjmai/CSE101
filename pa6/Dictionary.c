@@ -443,7 +443,7 @@ void rbTransplant(Dictionary D, Node x, Node y) {
     printf("ERROR on rbTransplant");
     exit(1);
   }
-  if (x->parent == NULL) {
+  if (x->parent == D->nil) {
     D->root = y;
   } else if (x == x->parent->left) {
     x->parent->left = y;
@@ -458,7 +458,7 @@ void rbDelete(Dictionary D, Node z) {
     printf("error on rb Delete");
     exit(1);
   }
- 
+
   Node A = z;
   Node y = D->nil;
   Node x = D->nil;
