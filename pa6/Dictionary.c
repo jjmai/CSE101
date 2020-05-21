@@ -354,7 +354,21 @@ void rbInsert(Dictionary D, KEY_TYPE z, VAL_TYPE v) {
     printf("ERROR on rbinsert");
     exit(1);
   }
+  bool check = false;
   if (getUnique(D) == 1) {
+    Node temp = D->root;
+    while (temp != D->nil) {
+      if (KEY_CMP(z, temp->key) == 0) {
+        check = true;
+        break;
+      } else if (KEY_CMP(z, temp->key) < 0) {
+        temp = temp->left;
+      } else if (KEY_CMP(z, temp->key) > 0) {
+        temp = temp->right;
+      }
+    }
+  }
+  if (getUnique(D) == 0 || check == false) {
     Node y = D->nil;
     Node A = D->root;
     Node new = newNode(z, v);
