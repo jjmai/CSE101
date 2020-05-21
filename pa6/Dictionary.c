@@ -371,7 +371,7 @@ void rbInsert(Dictionary D, KEY_TYPE z, VAL_TYPE v) {
   // if duplicte not allowed
   bool check = false;
   if (getUnique(D) == 1) {
-    if (lookup(D, z) != VAL_UNDEF) {
+    if (findKey(D, D->root, z) != D->nil) {
       check = true;
     }
   }
