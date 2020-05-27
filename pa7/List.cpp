@@ -108,6 +108,8 @@ void List::insertAfter(int x) {
         Node * N = new Node(x);
         N->next=afterCursor;
         N->prev=beforeCursor;
+        afterCursor->prev=N;
+        beforeCursor->next=N;
         afterCursor=N;
     } else  {
         Node *N= new Node(x);
@@ -125,6 +127,8 @@ void List::insertBefore(int x) {
         Node *N=new Node(x);
         N->next = afterCursor;
         N->prev= beforeCursor;
+        afterCursor->prev=N;
+        beforeCursor->next=N;
         beforeCursor=N;
     } else {
         Node *N=new Node(x);
@@ -204,14 +208,33 @@ void List::cleanup() {
     }
 }
 
+void List::clear() {
+    moveFront();
+    while(num_elements>0) {
+        eraseAfter();
+    }
+
+}
+
 
 List List::concat(const List &L) {
-    List  A;
-    Node *M=frontDummy;
-    Node *N =L.frontDummy;
+    List  A= List();
+    Node *N = backDummy->prev;
+    Node *M = L.backDummy->prev;
+
+    while(M!=L.frontDummy) {
+        A.insertAfter(M->data);
+        M=M->prev;
+    }
+    while(N!=frontDummy) {
+        A.insertAfter(N->data);
+        N=N->prev;
+    }
+    return A;
 }
 
 string to_string(int __val) {
+
 
 }
 
@@ -237,5 +260,6 @@ void List::print(List &L) {
         cout << " " << A->data;
         A=A->next;
     }
+    cout << "\n";
 }
 
