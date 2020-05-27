@@ -1,6 +1,7 @@
 #include "List.h"
 #include <string>
 #include <iostream>
+#include <cstdio>
 
 using namespace std;
 
@@ -113,13 +114,96 @@ void List::insertAfter(int x) {
         N->next=afterCursor;
         beforeCursor->next=N;
         N->prev= beforeCursor;
-        if(N->next != backDummy) {
-            N->next->prev = N;
-        }
+        N->next->prev = N;
         afterCursor = N;
     }
     num_elements++;
 }
+
+void List::insertBefore(int x) {
+    if(afterCursor==backDummy && beforeCursor==frontDummy) {
+        Node *N=new Node(x);
+        N->next = afterCursor;
+        N->prev= beforeCursor;
+        beforeCursor=N;
+    } else {
+        Node *N=new Node(x);
+        N->next=afterCursor;
+        beforeCursor->next=N;
+        N->prev=beforeCursor;
+        N->next->prev=N;
+        beforeCursor=N;
+        pos_cursor++;
+    }
+    num_elements++;
+}
+
+void List::eraseAfter() {
+    if(pos_cursor<num_elements) {
+        beforeCursor->next = afterCursor->next;
+        afterCursor->next->prev = beforeCursor;
+        afterCursor=afterCursor->next;
+        num_elements--;
+    }
+}
+
+void List::eraseBefore() {
+    if(pos_cursor>0) {
+        afterCursor->prev= beforeCursor->prev;
+        beforeCursor->prev->next = afterCursor;
+        beforeCursor = beforeCursor->prev;
+        pos_cursor--;
+        num_elements--;
+    }
+}
+
+int List::findNext(int x) {
+    while(pos_cursor!=num_elements) {
+        if(afterCursor->data == x) {
+            moveNext();
+            return pos_cursor;
+        }
+        moveNext();
+    }
+    return -1;
+}
+
+int List::findPrev(int x) {
+    while(pos_cursor!=0) {
+        if(beforeCursor->data == x) {
+            movePrev();
+            return pos_cursor;
+        }
+        movePrev();
+    }
+    return -1;
+}
+
+void List::cleanup() {
+    Node *temp;
+    Node *temp2;
+    for(temp=frontDummy;temp!=backDummy;temp=temp->next) {
+        temp2=temp->next;
+        while(temp2!=backDummy) {
+            if(temp->data == temp2->data) {
+                if(beforeCursor == temp2) {
+                    eraseBefore();
+                } if(afterCursor== temp2) {
+                    eraseAfter();
+                } else {
+                    Node *next = temp2->next;
+                    temp2->next->prev = temp2->prev;
+                    temp2->prev->next= temp2->next;
+                    num_elements--;
+                    temp2 = next;
+                }
+            } else {
+                temp2=temp2->next;
+            }
+        }
+    }
+}
+
 
 List List::concat(const List &L) {
     List  A;
@@ -146,5 +230,12 @@ bool List::equals(const List &R) {
     return check;
 }
 
-
+void List::print(List &L) {
+    Node *A = frontDummy;
+    A=A->next;
+    while(A!=backDummy) {
+        cout << " " << A->data;
+        A=A->next;
+    }
+}
 
