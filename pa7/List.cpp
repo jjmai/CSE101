@@ -22,7 +22,7 @@ List::List() {
 
 List::List(const List &L) {
   frontDummy = new Node(-1); // make new node
-  backDummy = new Node(-1);
+  backDummy = new Node(-2);
   beforeCursor = frontDummy;
   afterCursor = backDummy;
   pos_cursor = 0;
@@ -44,7 +44,12 @@ List::List(const List &L) {
   }
 }
 
-List::~List() {}
+List::~List() {
+  moveFront();
+  while (num_elements > 0) {
+    eraseAfter();
+  }
+}
 
 bool List::isEmpty() { return (num_elements == 0); }
 
@@ -66,14 +71,14 @@ void List ::moveBack() {
 
 int List::peekNext() {
   if (pos_cursor != num_elements) {
-    return pos_cursor + 1;
+    return afterCursor->data;
   }
   return -1;
 }
 
 int List::peekPrev() {
   if (pos_cursor != 0) {
-    return pos_cursor - 1;
+    return beforeCursor->data;
   }
   return -1;
 }
@@ -231,6 +236,7 @@ string List::to_string() {
   for (N = frontDummy->next; N != backDummy; N = N->next) {
     s += std::to_string(N->data) + " ";
   }
+  s += "\n";
   return s;
 }
 
