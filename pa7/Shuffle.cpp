@@ -21,7 +21,7 @@ int main(int argc, char *argv[]) {
 
   cout << "deck size \t"
        << "shuffle count \n";
-  cout << "-----------------------------------\n";
+  cout << "------------------------------\n";
 
   for (int i = 1; i <= n; i++) {
     int count = 0;

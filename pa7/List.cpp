@@ -28,20 +28,13 @@ List::List(const List &L) {
   pos_cursor = 0;
   num_elements = 0;
 
-  if (L.num_elements != 0) {
-    Node *N = L.frontDummy;
-    Node *M = new Node(N->data);
-    Node *temp;
-    frontDummy = M;
-    while (N->next != nullptr) {
-      temp = N->prev;
-      N = N->next;
-      M->next = new Node(N->data);
-      M->prev = temp;
-      M = M->next;
-    }
-    num_elements = L.num_elements;
+  Node *N = L.frontDummy->next;
+  while (N != L.backDummy && N != nullptr) {
+    this->insertBefore(N->data);
+    N = N->next;
   }
+
+  this->moveFront();
 }
 
 List::~List() {
@@ -49,6 +42,8 @@ List::~List() {
   while (num_elements > 0) {
     eraseAfter();
   }
+  delete frontDummy;
+  delete backDummy;
 }
 
 bool List::isEmpty() { return (num_elements == 0); }
@@ -108,6 +103,7 @@ void List::insertAfter(int x) {
     afterCursor->prev = N;
     beforeCursor->next = N;
     afterCursor = N;
+    num_elements++;
   } else {
     Node *N = new Node(x);
     N->next = afterCursor;
@@ -115,8 +111,9 @@ void List::insertAfter(int x) {
     N->prev = beforeCursor;
     N->next->prev = N;
     afterCursor = N;
+    num_elements++;
   }
-  num_elements++;
+  // num_elements++;
 }
 
 void List::insertBefore(int x) {
@@ -127,6 +124,7 @@ void List::insertBefore(int x) {
     afterCursor->prev = N;
     beforeCursor->next = N;
     beforeCursor = N;
+    num_elements++;
   } else {
     Node *N = new Node(x);
     N->next = afterCursor;
@@ -135,26 +133,33 @@ void List::insertBefore(int x) {
     N->next->prev = N;
     beforeCursor = N;
     pos_cursor++;
+    num_elements++;
   }
-  num_elements++;
+  // num_elements++;
 }
 
 void List::eraseAfter() {
+
   if (pos_cursor < num_elements) {
-    beforeCursor->next = afterCursor->next;
-    afterCursor->next->prev = beforeCursor;
+    Node *N = afterCursor;
     afterCursor = afterCursor->next;
+    beforeCursor->next = afterCursor;
+    afterCursor->prev = beforeCursor;
     num_elements--;
+    delete N;
   }
 }
 
 void List::eraseBefore() {
+
   if (pos_cursor > 0) {
-    afterCursor->prev = beforeCursor->prev;
-    beforeCursor->prev->next = afterCursor;
+    Node *N = beforeCursor;
     beforeCursor = beforeCursor->prev;
+    afterCursor->prev = beforeCursor;
+    beforeCursor->next = afterCursor;
     pos_cursor--;
     num_elements--;
+    delete N;
   }
 }
 
@@ -215,7 +220,7 @@ void List::clear() {
 
 List List::concat(const List &L) {
   List A = List();
-  Node *N = backDummy->prev;
+  Node *N = this->backDummy->prev;
   Node *M = L.backDummy->prev;
 
   while (M != L.frontDummy) {
@@ -268,6 +273,8 @@ List &List::operator=(const List &L) {
     std::swap(pos_cursor, temp.pos_cursor);
     std::swap(beforeCursor, temp.beforeCursor);
     std::swap(afterCursor, temp.afterCursor);
+    std::swap(frontDummy, temp.frontDummy);
+    std::swap(backDummy, temp.backDummy);
   }
   return *this;
 }
