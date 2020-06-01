@@ -14,6 +14,8 @@ List::Node::Node(int x) {
 List::List() {
   frontDummy = new Node(-1); // make new node
   backDummy = new Node(-2);
+  frontDummy->next = backDummy;
+  backDummy->prev = frontDummy;
   beforeCursor = frontDummy;
   afterCursor = backDummy;
   pos_cursor = 0;
@@ -23,6 +25,9 @@ List::List() {
 List::List(const List &L) {
   frontDummy = new Node(-1); // make new node
   backDummy = new Node(-2);
+  frontDummy->next = backDummy;
+  backDummy->prev = frontDummy;
+
   beforeCursor = frontDummy;
   afterCursor = backDummy;
   pos_cursor = 0;
@@ -39,7 +44,7 @@ List::List(const List &L) {
 
 List::~List() {
   moveFront();
-  while (num_elements > 0) {
+  while (!isEmpty() && num_elements > 0) {
     eraseAfter();
   }
   delete frontDummy;
@@ -96,7 +101,8 @@ int List::movePrev() {
   return -1;
 }
 void List::insertAfter(int x) {
-  if (afterCursor == backDummy && beforeCursor == frontDummy) {
+  if (num_elements == 0 && afterCursor == backDummy &&
+      beforeCursor == frontDummy) {
     Node *N = new Node(x);
     N->next = afterCursor;
     N->prev = beforeCursor;
@@ -107,9 +113,10 @@ void List::insertAfter(int x) {
   } else {
     Node *N = new Node(x);
     N->next = afterCursor;
-    beforeCursor->next = N;
     N->prev = beforeCursor;
-    N->next->prev = N;
+    beforeCursor->next = N;
+
+    afterCursor->prev = N;
     afterCursor = N;
     num_elements++;
   }
@@ -128,9 +135,10 @@ void List::insertBefore(int x) {
   } else {
     Node *N = new Node(x);
     N->next = afterCursor;
-    beforeCursor->next = N;
     N->prev = beforeCursor;
-    N->next->prev = N;
+    beforeCursor->next = N;
+
+    afterCursor->prev = N;
     beforeCursor = N;
     pos_cursor++;
     num_elements++;
