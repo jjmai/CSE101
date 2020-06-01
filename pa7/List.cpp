@@ -132,12 +132,12 @@ void List::insertBefore(int x) {
     beforeCursor->next = N;
     beforeCursor = N;
     num_elements++;
+    pos_cursor++;
   } else {
     Node *N = new Node(x);
     N->next = afterCursor;
     N->prev = beforeCursor;
     beforeCursor->next = N;
-
     afterCursor->prev = N;
     beforeCursor = N;
     pos_cursor++;
