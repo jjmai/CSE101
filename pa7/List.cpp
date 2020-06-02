@@ -194,25 +194,33 @@ int List::findPrev(int x) {
 }
 
 void List::cleanup() {
-  Node *temp;
-  Node *temp2;
-  for (temp = frontDummy; temp != backDummy; temp = temp->next) {
+  Node *temp, *temp2;
+  int count = 0;
+
+  for (temp = frontDummy->next; temp != backDummy; temp = temp->next) {
+    count = 0;
     temp2 = temp->next;
     while (temp2 != backDummy) {
       if (temp->data == temp2->data) {
-        if (beforeCursor == temp2) {
+        if (temp2 == beforeCursor) {
+          temp2 = temp2->next;
           eraseBefore();
-        }
-        if (afterCursor == temp2) {
+        } else if (temp2 == afterCursor) {
+          temp2 = temp2->next;
           eraseAfter();
         } else {
-          Node *next = temp2->next;
+          Node *N = temp2;
           temp2->next->prev = temp2->prev;
           temp2->prev->next = temp2->next;
+          if (count < pos_cursor) {
+            pos_cursor--;
+          }
           num_elements--;
-          temp2 = next;
+          temp2 = temp2->next;
+          delete N;
         }
       } else {
+        count++;
         temp2 = temp2->next;
       }
     }
