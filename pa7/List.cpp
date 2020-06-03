@@ -88,6 +88,7 @@ int List::moveNext() {
     pos_cursor++;
     beforeCursor = beforeCursor->next;
     afterCursor = afterCursor->next;
+    return beforeCursor->data;
   }
   return -1;
 }
@@ -97,6 +98,7 @@ int List::movePrev() {
     pos_cursor--;
     beforeCursor = beforeCursor->prev;
     afterCursor = afterCursor->prev;
+    return afterCursor->data;
   }
   return -1;
 }
