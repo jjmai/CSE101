@@ -1,3 +1,10 @@
+/************************************************************************
+ * Jordan Mai, jmai12
+ * CSE101 Spring 2020, PA7
+ * Shuffle.cpp
+ * Program to shuffle numbers and count 
+ **********************************************************************/
+
 #include "List.h"
 #include <cstdlib>
 #include <iostream>
@@ -46,6 +53,7 @@ int main(int argc, char *argv[]) {
   }
 }
 
+// function to shuffle
 void shuffle(List &D) {
   List A = List();
   List B = List();

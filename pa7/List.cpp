@@ -1,3 +1,10 @@
+/*************************************************
+ * Jordan Mai, jmai12
+ * CSE101 Spring 2020, PA7
+ * List.cpp
+ * List ADT
+ *********************************************/
+
 #include "List.h"
 #include <cstdio>
 #include <iostream>
@@ -10,10 +17,10 @@ List::Node::Node(int x) {
   next = nullptr;
   prev = nullptr;
 }
-
+// new List
 List::List() {
-  frontDummy = new Node(-1); // make new node
-  backDummy = new Node(-2);
+  frontDummy = new Node(-1); // null dummy
+  backDummy = new Node(-2);  // null dummy
   frontDummy->next = backDummy;
   backDummy->prev = frontDummy;
   beforeCursor = frontDummy;
@@ -21,7 +28,7 @@ List::List() {
   pos_cursor = 0;
   num_elements = 0;
 }
-
+// copy constructor
 List::List(const List &L) {
   frontDummy = new Node(-1); // make new node
   backDummy = new Node(-2);
@@ -41,7 +48,7 @@ List::List(const List &L) {
 
   this->moveFront();
 }
-
+// Destructor
 List::~List() {
   moveFront();
   while (!isEmpty() && num_elements > 0) {
@@ -57,6 +64,7 @@ int List::size() { return (num_elements); }
 
 int List::position() { return pos_cursor; }
 
+// move cursor
 void List::moveFront() {
   pos_cursor = 0;
   beforeCursor = frontDummy;
@@ -68,7 +76,7 @@ void List ::moveBack() {
   afterCursor = backDummy;
   beforeCursor = backDummy->prev;
 }
-
+// find data after cursor
 int List::peekNext() {
   if (pos_cursor != num_elements) {
     return afterCursor->data;
@@ -102,6 +110,7 @@ int List::movePrev() {
   }
   return -1;
 }
+// link node to after cursor
 void List::insertAfter(int x) {
   if (num_elements == 0 && afterCursor == backDummy &&
       beforeCursor == frontDummy) {
@@ -117,12 +126,10 @@ void List::insertAfter(int x) {
     N->next = afterCursor;
     N->prev = beforeCursor;
     beforeCursor->next = N;
-
     afterCursor->prev = N;
     afterCursor = N;
     num_elements++;
   }
-  // num_elements++;
 }
 
 void List::insertBefore(int x) {
@@ -145,11 +152,9 @@ void List::insertBefore(int x) {
     pos_cursor++;
     num_elements++;
   }
-  // num_elements++;
 }
-
+// delete after cursor
 void List::eraseAfter() {
-
   if (pos_cursor < num_elements) {
     Node *N = afterCursor;
     afterCursor = afterCursor->next;
@@ -161,7 +166,6 @@ void List::eraseAfter() {
 }
 
 void List::eraseBefore() {
-
   if (pos_cursor > 0) {
     Node *N = beforeCursor;
     beforeCursor = beforeCursor->prev;
@@ -172,7 +176,7 @@ void List::eraseBefore() {
     delete N;
   }
 }
-
+// lookup
 int List::findNext(int x) {
   while (pos_cursor != num_elements) {
     if (afterCursor->data == x) {
@@ -194,14 +198,15 @@ int List::findPrev(int x) {
   }
   return -1;
 }
-
+// remove duplicates
 void List::cleanup() {
   Node *temp, *temp2;
-  int count = 0;
+  int count = 0; // counter for cursor_position
 
   for (temp = frontDummy->next; temp != backDummy; temp = temp->next) {
     count = 0;
     temp2 = temp->next;
+    // iteratively checks if temp==temp2
     while (temp2 != backDummy) {
       if (temp->data == temp2->data) {
         if (temp2 == beforeCursor) {
@@ -214,6 +219,7 @@ void List::cleanup() {
           Node *N = temp2;
           temp2->next->prev = temp2->prev;
           temp2->prev->next = temp2->next;
+          // change cursor position iff left of cursor
           if (count < pos_cursor) {
             pos_cursor--;
           }
