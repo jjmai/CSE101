@@ -290,6 +290,7 @@ ostream &operator<<(ostream &stream, List &L) {
 
 bool operator==(List &A, const List &B) { return A.List::equals(B); }
 
+// swap all elements
 List &List::operator=(const List &L) {
   if (this != &L) {
     List temp = L;

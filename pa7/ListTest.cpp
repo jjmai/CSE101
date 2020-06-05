@@ -55,6 +55,7 @@ int main() {
 
   E.clear();
   if (E.size() == 0) {
-    cout << "success clear"<<"\n";
+    cout << "success clear"
+         << "\n";
   }
 }

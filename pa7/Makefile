@@ -34,7 +34,7 @@ List.o		:	List.cpp
 		$(COMPILE) -cpp List.cpp 
 
 clean		:
-		rm -rf *.o Shuffle ListClient infer-out
+		rm -rf *.o Shuffle ListTest infer-out
 
 format		:
 		clang-format -i -style=file *.cpp *.h

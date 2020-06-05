@@ -2,7 +2,7 @@
  * Jordan Mai, jmai12
  * CSE101 Spring 2020, PA7
  * Shuffle.cpp
- * Program to shuffle numbers and count 
+ * Program to shuffle numbers and count
  **********************************************************************/
 
 #include "List.h"
@@ -23,8 +23,8 @@ int main(int argc, char *argv[]) {
   string s = argv[1];
   n = stoi(s);
 
-  List l = List();
-  List ll;
+  List l = List(); // list to keep track of shuffle
+  List ll;         // copy orignal
 
   cout << "deck size \t"
        << "shuffle count \n";
@@ -43,6 +43,7 @@ int main(int argc, char *argv[]) {
     }
     shuffle(l);
     count = 1;
+    // shuffle function if ll !=l
     while (!ll.equals(l)) {
       shuffle(l);
       count++;
